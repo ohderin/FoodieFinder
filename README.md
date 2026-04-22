@@ -1,4 +1,4 @@
-# Foodie Finder
+# Foodie
 
 Expo / React Native Project
 
@@ -18,6 +18,12 @@ If `npm install` fails because of global npm cache permissions on your machine, 
 
 ```bash
 npm install --cache ./.npm-cache
+```
+If `npx expo start` throws an error 'Cannot find module', fix by reinstalling modules:
+
+```bash
+rm -rf node_modules package-lock.json
+npm install
 ```
 
 ## Configuration

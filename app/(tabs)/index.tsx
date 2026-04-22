@@ -14,12 +14,13 @@ import { SAMPLE_RESTAURANT } from "../../src/data/sampleRestaurant";
 import { FF } from "../../src/theme/colors";
 
 const CHIPS = [
-  "All",
   "Near Me",
   "Open Now",
-  "Chicken 🍗",
-  "Burgers 🍔",
+  "Chicken",
+  "Burgers",
+  "$",
   "$$",
+  "$$$",
 ];
 
 export default function DiscoverScreen() {
@@ -38,7 +39,6 @@ export default function DiscoverScreen() {
   return (
     <View style={[styles.root, { paddingTop: insets.top }]}>
       <View style={styles.searchBar}>
-        <Text style={styles.searchIcon}>🔍</Text>
         <Text style={styles.searchPh}>Search restaurants, dishes...</Text>
       </View>
       <ScrollView
