@@ -82,6 +82,19 @@ function pickNextRestaurant(prefs: SwipePrefs, excludeId?: string): Restaurant |
   return weighted[weighted.length - 1]?.restaurant ?? null;
 }
 
+function buildNextPrefs(current: SwipePrefs, currentId: string, direction: "left" | "right"): SwipePrefs {
+  const next: SwipePrefs = {
+    disliked: { ...current.disliked },
+    weights: { ...current.weights },
+  };
+  if (direction === "left") {
+    next.disliked[currentId] = true;
+  } else {
+    next.weights[currentId] = (next.weights[currentId] ?? 1) + 2;
+  }
+  return next;
+}
+
 export default function DiscoverScreen() {
   const insets = useSafeAreaInsets();
   const [directionsOpen, setDirectionsOpen] = useState(false);
@@ -90,6 +103,7 @@ export default function DiscoverScreen() {
   const [restaurant, setRestaurant] = useState<Restaurant | null>(() => pickNextRestaurant(INITIAL_PREFS));
   const [prefsHydrated, setPrefsHydrated] = useState(false);
   const swipe = useRef(new Animated.ValueXY()).current;
+  const prefsRef = useRef<SwipePrefs>(INITIAL_PREFS);
 
   useEffect(() => {
     (async () => {
@@ -115,6 +129,10 @@ export default function DiscoverScreen() {
       // Non-blocking persistence failure; UI should continue to function.
     });
   }, [prefs, prefsHydrated]);
+
+  useEffect(() => {
+    prefsRef.current = prefs;
+  }, [prefs]);
 
   const toggleFilter = (index: number) => {
     setFilters((current) => {
@@ -158,19 +176,9 @@ export default function DiscoverScreen() {
     (direction: "left" | "right") => {
       if (!restaurant) return;
       const currentId = restaurant.id;
-      setPrefs((prev) => {
-        const next: SwipePrefs = {
-          disliked: { ...prev.disliked },
-          weights: { ...prev.weights },
-        };
-        if (direction === "left") {
-          next.disliked[currentId] = true;
-        } else {
-          next.weights[currentId] = (next.weights[currentId] ?? 1) + 2;
-        }
-        setRestaurant(pickNextRestaurant(next, currentId));
-        return next;
-      });
+      const nextPrefs = buildNextPrefs(prefsRef.current, currentId, direction);
+      setPrefs(nextPrefs);
+      setRestaurant(pickNextRestaurant(nextPrefs, currentId));
     },
     [restaurant]
   );
