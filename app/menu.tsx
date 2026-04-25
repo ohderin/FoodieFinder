@@ -33,10 +33,181 @@ const ITEMS = [
   },
 ];
 
+const TAILGATES =[
+  {
+    badge: "🔥 Most Popular",
+    name: "25-finger Tailgate",
+    desc: "25 Chicken Fingers, 8 Cane's Sauces",
+    price:"$41.99",
+
+  },
+  {
+    name: "50-finger Tailgate",
+    desc: "50 Chicken Fingers, 16 Cane's Sauces or 22 oz. cup",
+    price:"$79.99",
+  },
+  {
+    name: "75-finger Tailgate",
+    desc: "75 Chicken Fingers, 25 Cane's Sauces or 32 oz. cup",
+    price:"$118.99",
+
+  },
+  {
+    name: "100-finger Tailgate",
+    desc: "100 Chicken Fingers, 33 Cane's Sauces or (2) 22 oz. cups",
+    price:"$142.99",
+
+  },
+  {
+    name: "200-finger Tailgate",
+    desc: "200 Chicken Fingers, 66 Cane's Sauces or (4) 22 oz cups",
+    price:"$281.98",
+
+  },
+  {
+    name: "300-finger Tailgate",
+    desc: "300 Chicken Fingers, 99 Cane's Sauces or (6) 22 oz. cups",
+    price:"$420.97",
+  },
+  {
+    name: "Crinkle-Cut Fries",
+    desc: "Crinkle-cut and perfectly salted",
+    price:"$2.49",
+
+  },
+  {
+    name: "Cane's Sauce",
+    desc: "Secret recipe, made in-restaurant everyday",
+    price:"$0.39",
+
+  },
+  {
+    name: "Texas Toast",
+    desc: "Golden brown and garlic buttery",
+    price:"$1.38",
+
+  },
+  {
+    name: "Coleslaw",
+    desc: "Crisp, creamy and freshly prepared",
+    price:"$1.38",
+
+  },
+];
+
+const EXTRAS =[
+  {
+  
+    name: "Chicken Finer",
+    desc: "All you need is 1",
+    price:"$1.99",
+
+  },
+  
+  {
+    name: "Crinkle-Cut Fries",
+    desc: "Crinkle-cut and perfectly salted",
+    price:"$2.49",
+
+  },
+  {
+    badge:"Best-Seller",
+    name: "Cane's Sauce",
+    desc: "Secret recipe, made in-restaurant everyday",
+    price:"$0.39",
+
+  },
+  {
+    name: "Texas Toast",
+    desc: "Golden brown and garlic buttery",
+    price:"$1.38",
+
+  },
+  {
+    name: "Coleslaw",
+    desc: "Crisp, creamy and freshly prepared",
+    price:"$1.38",
+  },
+   {
+    name: "Sandwhich",
+    desc: "3 Chicken Fingers, Cane's Sauces and lettuce on a toasted bun",
+    price:"$7.69",
+  },
+];
+
+const DRINKS =[
+  {
+    badge:"Fan-Favorite",
+    name: "Lemonade",
+    desc: "Regular",
+    price:"$2.69",
+
+  },
+  {
+    name: "Sweet Tea",
+    desc: "Regular",
+    price:"$2.49",
+  },
+  {
+    name: "Fountain Drink",
+    desc: "Your choice of Assorted Coke products, Regular size.",
+    price:"$2.49",
+
+  },
+  {
+    name: "Bottled Water",
+    desc: "High Quality H20",
+    price:"$2.49",
+
+  },
+  {
+    name: "Jug Lemonade",
+    desc: "A Gallon of classic Lemonade",
+    price:"$10.89",
+
+  },
+  {
+    name: "JUG of Sweet Tea",
+    desc: "As good as your Grandma's",
+    price:"$5.99",
+  },
+
+];
+
+const KIDS =[
+  {
+    badge: "🔥 Popular",
+    name: "The Kids Combo",
+    desc: "2 Chicken Fingers, 1 Cane's Sauce, Crinkle-Cut Fries and a Drink",
+    price:"$6.69",
+
+  },
+];
+
 const CATS = ["Combos", "TailGates", "Extras", "Drinks", "Kids"];
 
 export default function MenuScreen() {
   const [cat, setCat] = useState("Combos");
+
+  //new fuction for switch case that retrieves items based on category
+  const getItems = (category: any) => {
+    switch(category) {
+      case "Combos":
+        return ITEMS;
+      case "TailGates":
+        return TAILGATES;
+      case "Extras":
+        return EXTRAS;
+      case "Drinks":
+        return DRINKS;
+      case "Kids":
+        return KIDS;
+      default:
+        return ITEMS;
+    }
+  };
+
+  const currentItems = getItems(cat);
 
   return (
       <View style={{ flex: 1, backgroundColor: FF.cream }}>
@@ -65,8 +236,9 @@ export default function MenuScreen() {
             </Pressable>
           ))}
         </ScrollView>
+
         <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 40 }}>
-          {ITEMS.map((item, i) => (
+          {currentItems.map((item, i) => (
             <View key={i} style={styles.item}>
               <View style={styles.thumb}>
                 <Text style={{ fontSize: 22 }}>🍗</Text>
@@ -98,17 +270,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   catOn: { backgroundColor: FF.red },
-  catText: { fontWeight: "700", color: FF.dark },
+  catText: { fontWeight: "900", color: FF.dark },
   catTextOn: { color: "#fff" },
   item: {
     flexDirection: "row",
     gap: 12,
-    padding: 12,
+    padding: 10,
     backgroundColor: "#fff",
-    borderRadius: 16,
+    borderRadius: 14,
     borderWidth: 1,
     borderColor: FF.border,
-    marginBottom: 14,
+    marginBottom: 6,
   },
   thumb: {
     width: 56,
