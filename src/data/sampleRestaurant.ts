@@ -10,6 +10,8 @@ export type Restaurant = {
   isOpen: boolean;
   closingNote: string;
   address: string;
+  latitude: number;
+  longitude: number;
   imageUrl?: string;
 };
 
@@ -25,6 +27,8 @@ export const SAMPLE_RESTAURANT: Restaurant = {
   isOpen: true,
   closingNote: "Closes 2 AM",
   address: "1234 Florida Blvd, Baton Rouge, LA",
+  latitude: 30.4139,
+  longitude: -91.1796,
   imageUrl:
     "https://cdn.under30ceo.com/wp-content/uploads/2024/12/b67d70f9-3f97-4375-9bf9-e9ff1bb307c4.jpg",
 };
@@ -40,9 +44,11 @@ export const RESTAURANT_POOL: Restaurant[] = [
     distanceMiles: 0.7,
     priceLevel: 2,
     tags: ["Sports Bar", "Burgers", "Cajun"],
-    isOpen: true,
-    closingNote: "Closes 11 PM",
+    isOpen: false,
+    closingNote: "Opens 11 AM",
     address: "3838 Burbank Dr, Baton Rouge, LA",
+    latitude: 30.4008,
+    longitude: -91.1522,
     imageUrl:
       "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=1300&q=80",
   },
@@ -58,6 +64,8 @@ export const RESTAURANT_POOL: Restaurant[] = [
     isOpen: true,
     closingNote: "Closes 10 PM",
     address: "100 Lafayette St, Baton Rouge, LA",
+    latitude: 30.4465,
+    longitude: -91.1871,
     imageUrl:
       "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1300&q=80",
   },
@@ -70,9 +78,11 @@ export const RESTAURANT_POOL: Restaurant[] = [
     distanceMiles: 1.5,
     priceLevel: 2,
     tags: ["Seafood", "Cajun", "Po-boys"],
-    isOpen: true,
-    closingNote: "Closes 9 PM",
+    isOpen: false,
+    closingNote: "Opens 4 PM",
     address: "3225 Perkins Rd, Baton Rouge, LA",
+    latitude: 30.4239,
+    longitude: -91.1578,
     imageUrl:
       "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1300&q=80",
   },
@@ -88,6 +98,8 @@ export const RESTAURANT_POOL: Restaurant[] = [
     isOpen: true,
     closingNote: "Closes 10 PM",
     address: "2323 S Acadian Thruway, Baton Rouge, LA",
+    latitude: 30.4202,
+    longitude: -91.1635,
     imageUrl:
       "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1300&q=80",
   },
@@ -100,9 +112,11 @@ export const RESTAURANT_POOL: Restaurant[] = [
     distanceMiles: 2.2,
     priceLevel: 3,
     tags: ["French", "Fine Dining", "Wine"],
-    isOpen: true,
-    closingNote: "Closes 10 PM",
+    isOpen: false,
+    closingNote: "Opens 5 PM",
     address: "7731 Jefferson Hwy, Baton Rouge, LA",
+    latitude: 30.4032,
+    longitude: -91.1028,
     imageUrl:
       "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1300&q=80",
   },

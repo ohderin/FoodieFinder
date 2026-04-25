@@ -24,6 +24,11 @@ const DEFAULT_RESTAURANT_BG_URI =
 const SWIPE_THRESHOLD = 120;
 const SWIPE_PREFS_KEY = "foodie.swipePrefs";
 const AnimatedImageBackground = Animated.createAnimatedComponent(ImageBackground);
+const NEARBY_RADIUS_MILES = 3.5;
+const HARD_CODED_NEARBY_ORIGIN = {
+  latitude: 30.4128,
+  longitude: -91.1773,
+};
 
 type SwipePrefs = {
   disliked: Record<string, true>;
@@ -62,8 +67,12 @@ function normalizePrefs(raw: unknown): SwipePrefs {
   };
 }
 
-function pickNextRestaurant(prefs: SwipePrefs, excludeId?: string): Restaurant | null {
-  const candidates = RESTAURANT_POOL.filter((restaurant) => !prefs.disliked[restaurant.id]);
+function pickNextRestaurant(
+  prefs: SwipePrefs,
+  excludeId?: string,
+  pool: Restaurant[] = RESTAURANT_POOL
+): Restaurant | null {
+  const candidates = pool.filter((restaurant) => !prefs.disliked[restaurant.id]);
   if (!candidates.length) return null;
 
   const weighted = candidates.map((restaurant) => {
@@ -80,6 +89,23 @@ function pickNextRestaurant(prefs: SwipePrefs, excludeId?: string): Restaurant |
     if (random <= 0) return item.restaurant;
   }
   return weighted[weighted.length - 1]?.restaurant ?? null;
+}
+
+function milesBetween(
+  from: { latitude: number; longitude: number },
+  to: { latitude: number; longitude: number }
+) {
+  const toRadians = (deg: number) => (deg * Math.PI) / 180;
+  const earthRadiusMiles = 3958.8;
+  const dLat = toRadians(to.latitude - from.latitude);
+  const dLon = toRadians(to.longitude - from.longitude);
+  const lat1 = toRadians(from.latitude);
+  const lat2 = toRadians(to.latitude);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return earthRadiusMiles * c;
 }
 
 function buildNextPrefs(current: SwipePrefs, currentId: string, direction: "left" | "right"): SwipePrefs {
@@ -142,6 +168,46 @@ export default function DiscoverScreen() {
     });
   };
 
+  const distanceByRestaurantId = useMemo(() => {
+    return Object.fromEntries(
+      RESTAURANT_POOL.map((restaurant) => [
+        restaurant.id,
+        milesBetween(
+          HARD_CODED_NEARBY_ORIGIN,
+          { latitude: restaurant.latitude, longitude: restaurant.longitude }
+        ),
+      ])
+    ) as Record<string, number>;
+  }, []);
+
+  const filteredRestaurants = useMemo(() => {
+    const showNearbyOnly = filters[0];
+    const showOpenOnly = filters[1];
+    const selectedPriceLevels = FILTERS.slice(2)
+      .map((label, idx) => (filters[idx + 2] ? label.length : null))
+      .filter((value): value is number => value !== null);
+
+    let next = RESTAURANT_POOL.filter((item) => {
+      if (showOpenOnly && !item.isOpen) return false;
+      if (selectedPriceLevels.length > 0 && !selectedPriceLevels.includes(item.priceLevel)) return false;
+      if (showNearbyOnly) {
+        const miles = distanceByRestaurantId[item.id];
+        return typeof miles === "number" && miles <= NEARBY_RADIUS_MILES;
+      }
+      return true;
+    });
+
+    if (showNearbyOnly) {
+      next = [...next].sort((a, b) => {
+        const aMiles = distanceByRestaurantId[a.id] ?? a.distanceMiles;
+        const bMiles = distanceByRestaurantId[b.id] ?? b.distanceMiles;
+        return aMiles - bMiles;
+      });
+    }
+
+    return next;
+  }, [distanceByRestaurantId, filters]);
+
   const rotate = useMemo(
     () =>
       swipe.x.interpolate({
@@ -178,9 +244,9 @@ export default function DiscoverScreen() {
       const currentId = restaurant.id;
       const nextPrefs = buildNextPrefs(prefsRef.current, currentId, direction);
       setPrefs(nextPrefs);
-      setRestaurant(pickNextRestaurant(nextPrefs, currentId));
+      setRestaurant(pickNextRestaurant(nextPrefs, currentId, filteredRestaurants));
     },
-    [restaurant]
+    [filteredRestaurants, restaurant]
   );
 
   const snapBack = useCallback(() => {
@@ -210,8 +276,15 @@ export default function DiscoverScreen() {
   const resetRecommendations = useCallback(() => {
     swipe.setValue({ x: 0, y: 0 });
     setPrefs(INITIAL_PREFS);
-    setRestaurant(pickNextRestaurant(INITIAL_PREFS));
-  }, [swipe]);
+    setRestaurant(pickNextRestaurant(INITIAL_PREFS, undefined, filteredRestaurants));
+  }, [filteredRestaurants, swipe]);
+
+  useEffect(() => {
+    const stillVisible = !!restaurant && filteredRestaurants.some((candidate) => candidate.id === restaurant.id);
+    if (!stillVisible) {
+      setRestaurant(pickNextRestaurant(prefs, restaurant?.id, filteredRestaurants));
+    }
+  }, [filteredRestaurants, prefs, restaurant]);
 
   const panResponder = useMemo(
     () =>
@@ -311,9 +384,14 @@ export default function DiscoverScreen() {
             {restaurant ? (
               <>
                 <Text style={styles.nameText}>{restaurant.name}</Text>
-                <Text style={styles.metaText}>LSU Area · {restaurant.distanceMiles.toFixed(1)} miles away</Text>
+                <Text style={styles.metaText}>
+                  LSU Area · {(distanceByRestaurantId[restaurant.id] ?? restaurant.distanceMiles).toFixed(1)} miles away
+                </Text>
                 <Text style={styles.metaText}>
                   {restaurant.tags[0]}, {restaurant.tags[1]}
+                </Text>
+                <Text style={styles.metaText}>
+                  {restaurant.isOpen ? "Open Now" : "Closed"} · {restaurant.closingNote}
                 </Text>
                 <Text style={styles.ratingText}>
                   ★ {restaurant.rating.toFixed(1)} ({restaurant.reviewCount} reviews)
