@@ -15,6 +15,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { DirectionsSheet } from "../../src/components/DirectionsSheet";
+import { useApp } from "../../src/context/AppContext";
 import { RESTAURANT_POOL, SAMPLE_RESTAURANT, type Restaurant } from "../../src/data/sampleRestaurant";
 import { FF } from "../../src/theme/colors";
 
@@ -121,8 +122,19 @@ function buildNextPrefs(current: SwipePrefs, currentId: string, direction: "left
   return next;
 }
 
+function overlaps(selected: string[] | undefined, available: string[]) {
+  if (!selected || selected.length === 0) return true;
+  return selected.some((value) => available.includes(value));
+}
+
+function containsAll(selected: string[] | undefined, available: string[]) {
+  if (!selected || selected.length === 0) return false;
+  return selected.every((value) => available.includes(value));
+}
+
 export default function DiscoverScreen() {
   const insets = useSafeAreaInsets();
+  const { vibePreferences } = useApp();
   const [directionsOpen, setDirectionsOpen] = useState(false);
   const [filters, setFilters] = useState<boolean[]>(() => FILTERS.map((_, i) => i === 0));
   const [prefs, setPrefs] = useState<SwipePrefs>(INITIAL_PREFS);
@@ -208,6 +220,36 @@ export default function DiscoverScreen() {
     return next;
   }, [distanceByRestaurantId, filters]);
 
+  const vibeFilteredRestaurants = useMemo(() => {
+    if (!vibePreferences) return filteredRestaurants;
+    const narrowed = filteredRestaurants.filter((restaurant) => {
+      if (restaurant.priceLevel !== vibePreferences.priceLevel) return false;
+      if (!overlaps(vibePreferences.meals, restaurant.mealTags)) return false;
+      if (!overlaps(vibePreferences.styles, restaurant.diningStyles)) return false;
+      if (!overlaps(vibePreferences.cuisines, restaurant.cuisineTags)) return false;
+      return true;
+    });
+    return narrowed.length > 0 ? narrowed : filteredRestaurants;
+  }, [filteredRestaurants, vibePreferences]);
+
+  const strictVibeMatchedIds = useMemo(() => {
+    if (!vibePreferences) return new Set<string>();
+    const strictMatches = filteredRestaurants.filter((candidate) => {
+      return (
+        candidate.priceLevel === vibePreferences.priceLevel &&
+        containsAll(vibePreferences.meals, candidate.mealTags) &&
+        containsAll(vibePreferences.styles, candidate.diningStyles) &&
+        containsAll(vibePreferences.cuisines, candidate.cuisineTags)
+      );
+    });
+    return new Set(strictMatches.map((item) => item.id));
+  }, [filteredRestaurants, vibePreferences]);
+
+  const isVibeMatch = useMemo(() => {
+    if (!restaurant || !vibePreferences) return false;
+    return strictVibeMatchedIds.has(restaurant.id);
+  }, [restaurant, strictVibeMatchedIds, vibePreferences]);
+
   const rotate = useMemo(
     () =>
       swipe.x.interpolate({
@@ -244,9 +286,9 @@ export default function DiscoverScreen() {
       const currentId = restaurant.id;
       const nextPrefs = buildNextPrefs(prefsRef.current, currentId, direction);
       setPrefs(nextPrefs);
-      setRestaurant(pickNextRestaurant(nextPrefs, currentId, filteredRestaurants));
+      setRestaurant(pickNextRestaurant(nextPrefs, currentId, vibeFilteredRestaurants));
     },
-    [filteredRestaurants, restaurant]
+    [restaurant, vibeFilteredRestaurants]
   );
 
   const snapBack = useCallback(() => {
@@ -276,15 +318,16 @@ export default function DiscoverScreen() {
   const resetRecommendations = useCallback(() => {
     swipe.setValue({ x: 0, y: 0 });
     setPrefs(INITIAL_PREFS);
-    setRestaurant(pickNextRestaurant(INITIAL_PREFS, undefined, filteredRestaurants));
-  }, [filteredRestaurants, swipe]);
+    setRestaurant(pickNextRestaurant(INITIAL_PREFS, undefined, vibeFilteredRestaurants));
+  }, [swipe, vibeFilteredRestaurants]);
 
   useEffect(() => {
-    const stillVisible = !!restaurant && filteredRestaurants.some((candidate) => candidate.id === restaurant.id);
+    const stillVisible =
+      !!restaurant && vibeFilteredRestaurants.some((candidate) => candidate.id === restaurant.id);
     if (!stillVisible) {
-      setRestaurant(pickNextRestaurant(prefs, restaurant?.id, filteredRestaurants));
+      setRestaurant(pickNextRestaurant(prefs, restaurant?.id, vibeFilteredRestaurants));
     }
-  }, [filteredRestaurants, prefs, restaurant]);
+  }, [prefs, restaurant, vibeFilteredRestaurants]);
 
   const panResponder = useMemo(
     () =>
@@ -368,6 +411,12 @@ export default function DiscoverScreen() {
             <Ionicons name="location-sharp" size={12} color="#E8FFF4" />
             <Text style={styles.locationPillText}>Nearby</Text>
           </View>
+          {isVibeMatch ? (
+            <View style={styles.vibeMatchPill}>
+              <Ionicons name="sparkles" size={12} color="#FFF2E6" />
+              <Text style={styles.vibeMatchPillText}>Matched your vibe</Text>
+            </View>
+          ) : null}
 
           <Pressable style={styles.floatAction} onPress={() => setDirectionsOpen(true)} disabled={!restaurant}>
             <Ionicons name="arrow-up" size={20} color="#FFFFFF" />
@@ -572,6 +621,25 @@ const styles = StyleSheet.create({
     color: "#E8FFF4",
     fontWeight: "700",
     fontSize: 13,
+  },
+  vibeMatchPill: {
+    position: "absolute",
+    left: 16,
+    top: 56,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    backgroundColor: "rgba(242,67,0,0.9)",
+    borderRadius: 999,
+    paddingHorizontal: 11,
+    paddingVertical: 5,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.3)",
+  },
+  vibeMatchPillText: {
+    color: "#FFF2E6",
+    fontWeight: "700",
+    fontSize: 12,
   },
   floatAction: {
     position: "absolute",
