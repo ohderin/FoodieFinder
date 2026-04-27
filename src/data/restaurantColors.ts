@@ -55,6 +55,17 @@ export const RESTAURANT_COLORS: Record<string, { primary: string; light: string;
     light: "#96AB52",
     dark: "#5D6E2D",
   },
+  "overpass-merchant": {
+    primary: "#C195B9",
+    light: "#D8B7D2",
+    dark: "#8E6A88",
+  },
+
+  "pluckers": {
+    primary: "#013097",
+    light: "#335CB3",
+    dark: "#001F63",
+  },
 
   // 🍕 Pizza / Italian
   "lit-pizza": {
@@ -253,6 +264,11 @@ export const RESTAURANT_COLORS: Record<string, { primary: string; light: string;
     primary: "#0E3C4B",
     light: "#2A6580",
     dark: "#071F2A",
+  },
+  "elsies-plate-pie": {
+  primary: "#FF7848",
+  light: "#FFB199",
+  dark: "#B84A2A",
   },
   "counterspace": {
     primary: "#9468A4",
