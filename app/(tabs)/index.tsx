@@ -460,7 +460,14 @@ export default function DiscoverScreen() {
       <View style={styles.actionRow}>
         <CircleAction icon="refresh" color="#A5A5AA" onPress={resetRecommendations} />
         <CircleAction icon="close" color="#F44336" big onPress={() => triggerSwipe("left")} />
-        <CircleAction icon="restaurant" color="#F44336" onPress={() => router.push("/menu")} />
+        <CircleAction icon="restaurant" color="#F44336" onPress={() => { if (restaurant) {
+           router.push({
+          pathname: "/menu",
+          params: {restaurantId: restaurant.id}
+          })
+        }
+        }} 
+          />
         <CircleAction icon="heart" color="#FFFFFF" big onPress={() => triggerSwipe("right")} accent />
       </View>
 
@@ -722,3 +729,4 @@ const styles = StyleSheet.create({
     borderColor: "#F24300",
   },
 });
+
