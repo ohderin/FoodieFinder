@@ -415,7 +415,11 @@ const vibeFilteredRestaurants = useMemo(() => {
           <Pressable
             key={label}
             onPress={() => toggleFilter(index)}
-            style={[styles.filterPill, filters[index] && styles.filterPillActive]}
+            style={[
+              styles.filterPill,
+              index >= 2 && styles.filterPillPrice,
+              filters[index] && styles.filterPillActive,
+            ]}
           >
             <Text style={[styles.filterText, filters[index] && styles.filterTextActive]}>{label}</Text>
           </Pressable>
@@ -602,6 +606,10 @@ const createStyles = (colors: ReturnType<typeof useApp>["colors"]) => StyleSheet
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.cream2,
+  },
+  filterPillPrice: {
+    width: 58,
+    alignItems: "center",
   },
   filterPillActive: {
     borderColor: colors.red,
