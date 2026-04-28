@@ -117,7 +117,7 @@ export default function DiscoverScreen() {
         setPrefs(parsed);
         setRestaurant(pickNextRestaurant(parsed));
       } catch {
-        // Ignore malformed local data and continue with defaults.
+        // ignore broken data and use defaults
       } finally {
         setPrefsHydrated(true);
       }
@@ -127,7 +127,7 @@ export default function DiscoverScreen() {
   useEffect(() => {
     if (!prefsHydrated) return;
     AsyncStorage.setItem(SWIPE_PREFS_KEY, JSON.stringify(prefs)).catch(() => {
-      // Non-blocking persistence failure; UI should continue to function.
+      // persistance failure, UI fallback (continue regardless)
     });
   }, [prefs, prefsHydrated]);
 
@@ -136,6 +136,7 @@ export default function DiscoverScreen() {
   }, [prefs]);
 
   const { addHeart } = useApp();
+
   const toggleFilter = (index: number) => {
     setFilters((current) => {
       const next = [...current];
@@ -175,14 +176,16 @@ export default function DiscoverScreen() {
   );
 
   const advanceRestaurant = useCallback(
-    (direction: "left" | "right") => {
-      if (!restaurant) return;
-      const currentId = restaurant.id;
+    (direction: "left" | "right", current: Restaurant) => {
+      const currentId = current.id;
+      if (direction === "right") {
+        addHeart(current);
+      }
       const nextPrefs = buildNextPrefs(prefsRef.current, currentId, direction);
       setPrefs(nextPrefs);
       setRestaurant(pickNextRestaurant(nextPrefs, currentId));
     },
-    [restaurant]
+    [addHeart]
   );
 
   const snapBack = useCallback(() => {
@@ -196,6 +199,7 @@ export default function DiscoverScreen() {
   const triggerSwipe = useCallback(
     (direction: "left" | "right") => {
       if (!restaurant) return;
+      const current = restaurant;
       const targetX = direction === "right" ? 420 : -420;
       Animated.timing(swipe, {
         toValue: { x: targetX, y: -20 },
@@ -203,7 +207,7 @@ export default function DiscoverScreen() {
         useNativeDriver: true,
       }).start(() => {
         swipe.setValue({ x: 0, y: 0 });
-        advanceRestaurant(direction);
+        advanceRestaurant(direction, current);
       });
     },
     [advanceRestaurant, restaurant, swipe]
@@ -336,7 +340,7 @@ export default function DiscoverScreen() {
         <CircleAction icon="refresh" color="#A5A5AA" onPress={resetRecommendations} />
         <CircleAction icon="close" color="#F44336" big onPress={() => triggerSwipe("left")} />
         <CircleAction icon="restaurant" color="#F44336" onPress={() => router.push("/menu")} />
-        <CircleAction icon="heart" color="#FFFFFF" big onPress={() => {triggerSwipe("right"); if(restaurant){addHeart(restaurant);}}} accent />
+        <CircleAction icon="heart" color="#FFFFFF" big onPress={() => triggerSwipe("right")} accent />
       </View>
 
       <DirectionsSheet

@@ -2,7 +2,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { type Restaurant } from "../../src/data/sampleRestaurant";
 
-const KEY = "foodie.hasCompletedOnboarding";
+const ONBOARDING_KEY = "foodie.hasCompletedOnboarding";
+const HEARTED_KEY = "foodie.heartedRestaurants";
 
 type AppContextValue = {
   ready: boolean;
@@ -20,26 +21,47 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [ready, setReady] = useState(false);
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
   const [hearted, setHearted] = useState<Restaurant[]>([]);
-  
+  const [heartedHydrated, setHeartedHydrated] = useState(false);
 
   useEffect(() => {
     (async () => {
       try {
-        const v = await AsyncStorage.getItem(KEY);
-        setHasCompletedOnboarding(v === "1");
+        const [onboardingValue, heartedValue] = await Promise.all([
+          AsyncStorage.getItem(ONBOARDING_KEY),
+          AsyncStorage.getItem(HEARTED_KEY),
+        ]);
+        setHasCompletedOnboarding(onboardingValue === "1");
+        if (heartedValue) {
+          try {
+            const parsed = JSON.parse(heartedValue) as Restaurant[];
+            if (Array.isArray(parsed)) {
+              setHearted(parsed);
+            }
+          } catch {
+            // ignore broken data and use defaults
+          }
+        }
       } finally {
+        setHeartedHydrated(true);
         setReady(true);
       }
     })();
   }, []);
 
+  useEffect(() => {
+    if (!heartedHydrated) return;
+    AsyncStorage.setItem(HEARTED_KEY, JSON.stringify(hearted)).catch(() => {
+      // persistance failure, UI fallback (continue regardless)
+    });
+  }, [hearted, heartedHydrated]);
+
   const completeOnboarding = useCallback(async () => {
-    await AsyncStorage.setItem(KEY, "1");
+    await AsyncStorage.setItem(ONBOARDING_KEY, "1");
     setHasCompletedOnboarding(true);
   }, []);
 
   const resetOnboarding = useCallback(async () => {
-    await AsyncStorage.removeItem(KEY);
+    await AsyncStorage.removeItem(ONBOARDING_KEY);
     setHasCompletedOnboarding(false);
   }, []);
 
