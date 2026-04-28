@@ -6,7 +6,7 @@ import { useApp } from "../src/context/AppContext";
 
 const REVIEWS = [
   { initials: "JD", name: "John Doe", stars: 5, text: "I wanna get married here. The sauce hits different every single time." },
-  { initials: "BJ", name: "Billy John", stars: 4, text: "Best fried chicken hands down. Crinkle fries are always perfectly crispy." },
+  { initials: "BJ", name: "Billy John", stars: 4, text: "Their tap water was up to par. Their food was just ok." },
   { initials: "BC", name: "Brittney Clare", stars: 2, text: "Mid. The hype is too much. It's decent but I don't understand why everyone loses their mind over it." },
 ];
 
