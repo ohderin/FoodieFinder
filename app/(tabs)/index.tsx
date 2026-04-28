@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useApp } from "../../src/context/AppContext";
 import {
   Animated,
   ImageBackground,
@@ -134,6 +135,7 @@ export default function DiscoverScreen() {
     prefsRef.current = prefs;
   }, [prefs]);
 
+  const { addHeart } = useApp();
   const toggleFilter = (index: number) => {
     setFilters((current) => {
       const next = [...current];
@@ -334,7 +336,7 @@ export default function DiscoverScreen() {
         <CircleAction icon="refresh" color="#A5A5AA" onPress={resetRecommendations} />
         <CircleAction icon="close" color="#F44336" big onPress={() => triggerSwipe("left")} />
         <CircleAction icon="restaurant" color="#F44336" onPress={() => router.push("/menu")} />
-        <CircleAction icon="heart" color="#FFFFFF" big onPress={() => triggerSwipe("right")} accent />
+        <CircleAction icon="heart" color="#FFFFFF" big onPress={() => {triggerSwipe("right"); if(restaurant){addHeart(restaurant);}}} accent />
       </View>
 
       <DirectionsSheet
