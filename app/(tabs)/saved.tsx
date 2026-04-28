@@ -14,15 +14,15 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useApp } from "../../src/context/AppContext";
-import { FF } from "../../src/theme/colors";
 
 const DEFAULT_RESTAURANT_BG_URI =
   "https://cdn.under30ceo.com/wp-content/uploads/2024/12/b67d70f9-3f97-4375-9bf9-e9ff1bb307c4.jpg";
 
 export default function SavedScreen() {
   const insets = useSafeAreaInsets();
-  const { hearted, removeHeart } = useApp();
+  const { hearted, removeHeart, colors } = useApp();
   const [contextCardId, setContextCardId] = useState<string | null>(null);
+  const styles = React.useMemo(() => createStyles(colors), [colors]);
 
   return (
     <TouchableWithoutFeedback
@@ -112,7 +112,7 @@ export default function SavedScreen() {
                     setContextCardId(null);
                   }}
                 >
-                  <Ionicons name="trash-outline" size={14} color={FF.red} />
+                  <Ionicons name="trash-outline" size={14} color={colors.red} />
                   <Text style={styles.contextRemoveText}>Remove from Saved</Text>
                 </Pressable>
               ) : null}
@@ -133,12 +133,12 @@ export default function SavedScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: FF.cream, paddingHorizontal: 14 },
+const createStyles = (colors: ReturnType<typeof useApp>["colors"]) => StyleSheet.create({
+  root: { flex: 1, backgroundColor: colors.cream, paddingHorizontal: 14 },
   title: {
     fontSize: 22,
     fontWeight: "900",
-    color: FF.dark,
+    color: colors.dark,
     marginBottom: 14,
     textAlign: "center",
   },
@@ -184,8 +184,8 @@ const styles = StyleSheet.create({
     marginTop: 8,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: FF.border,
-    backgroundColor: "#fff",
+    borderColor: colors.border,
+    backgroundColor: colors.cream2,
     paddingVertical: 8,
     paddingHorizontal: 10,
     flexDirection: "row",
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 6,
   },
-  contextRemoveText: { color: FF.red, fontSize: 12, fontWeight: "700" },
+  contextRemoveText: { color: colors.red, fontSize: 12, fontWeight: "700" },
   cardBody: { paddingHorizontal: 10, paddingBottom: 10 },
   itemName: { color: "#fff", fontSize: 16, fontWeight: "900" },
   itemMeta: {
@@ -209,10 +209,10 @@ const styles = StyleSheet.create({
   },
   empty: { alignItems: "center", marginTop: 48 },
   icon: { fontSize: 56, marginBottom: 12 },
-  emptyTitle: { fontSize: 22, fontWeight: "900", color: FF.dark, marginBottom: 8 },
+  emptyTitle: { fontSize: 22, fontWeight: "900", color: colors.dark, marginBottom: 8 },
   emptyDesc: {
     fontSize: 17,
-    color: FF.med,
+    color: colors.med,
     textAlign: "center",
     lineHeight: 22,
   },

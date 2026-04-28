@@ -1,15 +1,14 @@
 import { Redirect } from "expo-router";
 import { useApp } from "../src/context/AppContext";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
-import { FF } from "../src/theme/colors";
 
 export default function Index() {
-  const { ready, hasCompletedOnboarding } = useApp();
+  const { ready, hasCompletedOnboarding, colors } = useApp();
 
   if (!ready) {
     return (
-      <View style={styles.center}>
-        <ActivityIndicator size="large" color={FF.red} />
+      <View style={[styles.center, { backgroundColor: colors.cream }]}>
+        <ActivityIndicator size="large" color={colors.red} />
       </View>
     );
   }
@@ -22,5 +21,5 @@ export default function Index() {
 }
 
 const styles = StyleSheet.create({
-  center: { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: FF.cream },
+  center: { flex: 1, justifyContent: "center", alignItems: "center" },
 });

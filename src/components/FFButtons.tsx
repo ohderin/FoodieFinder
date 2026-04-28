@@ -1,6 +1,6 @@
 import React from "react";
 import { Pressable, StyleSheet, Text, ViewStyle } from "react-native";
-import { FF } from "../theme/colors";
+import { useApp } from "../context/AppContext";
 
 type Props = {
   title: string;
@@ -9,10 +9,16 @@ type Props = {
 };
 
 export function FFPrimaryButton({ title, onPress, style }: Props) {
+  const { colors } = useApp();
   return (
     <Pressable
       onPress={onPress}
-      style={({ pressed }) => [styles.primary, pressed && styles.primaryPressed, style]}
+      style={({ pressed }) => [
+        styles.primary,
+        { backgroundColor: colors.red },
+        pressed && styles.primaryPressed,
+        style,
+      ]}
     >
       <Text style={styles.primaryText}>{title}</Text>
     </Pressable>
@@ -20,19 +26,25 @@ export function FFPrimaryButton({ title, onPress, style }: Props) {
 }
 
 export function FFOutlineButton({ title, onPress, style }: Props) {
+  const { colors } = useApp();
   return (
     <Pressable
       onPress={onPress}
-      style={({ pressed }) => [styles.outline, pressed && styles.outlinePressed, style]}
+      style={({ pressed }) => [
+        styles.outline,
+        { borderColor: colors.red },
+        pressed && [styles.outlinePressed, { backgroundColor: colors.redLight }],
+        style,
+      ]}
     >
-      <Text style={styles.outlineText}>{title}</Text>
+      <Text style={[styles.outlineText, { color: colors.red }]}>{title}</Text>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   primary: {
-    backgroundColor: FF.red,
+    backgroundColor: "#e63946",
     borderRadius: 18,
     paddingVertical: 16,
     paddingHorizontal: 32,
@@ -47,16 +59,14 @@ const styles = StyleSheet.create({
   },
   outline: {
     borderWidth: 2,
-    borderColor: FF.red,
     borderRadius: 18,
     paddingVertical: 14,
     paddingHorizontal: 32,
     alignItems: "center",
     marginHorizontal: 32,
   },
-  outlinePressed: { backgroundColor: FF.redLight },
+  outlinePressed: {},
   outlineText: {
-    color: FF.red,
     fontSize: 16,
     fontWeight: "800",
   },

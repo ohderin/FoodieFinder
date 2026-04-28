@@ -41,17 +41,29 @@ const CUISINES: ReadonlyArray<{ icon: IconSpec; label: string }> = [
 
 export default function PrefsScreen() {
   const insets = useSafeAreaInsets();
-  const { completeOnboarding, saveVibePreferences } = useApp();
-  const [meal, setMeal] = useState<Record<string, boolean>>({
-    Lunch: true,
-    Dinner: true,
+  const { completeOnboarding, saveVibePreferences, vibePreferences, colors } = useApp();
+  const [meal, setMeal] = useState<Record<string, boolean>>(() => {
+    const selected = vibePreferences?.meals ?? ["Lunch", "Dinner"];
+    return selected.reduce<Record<string, boolean>>((acc, label) => {
+      acc[label] = true;
+      return acc;
+    }, {});
   });
-  const [style, setStyle] = useState<Record<string, boolean>>({ "Dine-in": true });
-  const [cuisine, setCuisine] = useState<Record<string, boolean>>({
-    Chicken: true,
-    Burgers: true,
+  const [style, setStyle] = useState<Record<string, boolean>>(() => {
+    const selected = vibePreferences?.styles ?? ["Dine-in"];
+    return selected.reduce<Record<string, boolean>>((acc, label) => {
+      acc[label] = true;
+      return acc;
+    }, {});
   });
-  const [price, setPrice] = useState(1);
+  const [cuisine, setCuisine] = useState<Record<string, boolean>>(() => {
+    const selected = vibePreferences?.cuisines ?? ["Chicken", "Burgers"];
+    return selected.reduce<Record<string, boolean>>((acc, label) => {
+      acc[label] = true;
+      return acc;
+    }, {});
+  });
+  const [price, setPrice] = useState(() => Math.max(0, (vibePreferences?.priceLevel ?? 2) - 1));
 
   const finish = async () => {
     await saveVibePreferences({
@@ -65,16 +77,16 @@ export default function PrefsScreen() {
   };
 
   return (
-    <View style={[styles.root, { paddingTop: insets.top }]}>
+    <View style={[styles.root, { paddingTop: insets.top, backgroundColor: colors.cream }]}>
       <View style={styles.header}>
         <Pressable onPress={() => router.back()} hitSlop={12}>
-          <Text style={styles.back}>‹</Text>
+          <Text style={[styles.back, { color: colors.dark }]}>‹</Text>
         </Pressable>
-        <Text style={styles.headerTitle}>Set Your Vibe</Text>
+        <Text style={[styles.headerTitle, { color: colors.dark }]}>Set Your Vibe</Text>
         <View style={{ width: 38 }} />
       </View>
       <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
-        <Section title="Meal Time">
+        <Section title="Meal Time" colors={colors}>
           <ChipRow>
             {MEALS.map((m) => (
               <PrefChip
@@ -85,11 +97,12 @@ export default function PrefsScreen() {
                 onToggle={() =>
                   setMeal((s) => ({ ...s, [m.label]: !s[m.label] }))
                 }
+                colors={colors}
               />
             ))}
           </ChipRow>
         </Section>
-        <Section title="Dining Style">
+        <Section title="Dining Style" colors={colors}>
           <ChipRow>
             {STYLES.map((m) => (
               <PrefChip
@@ -100,11 +113,12 @@ export default function PrefsScreen() {
                 onToggle={() =>
                   setStyle((s) => ({ ...s, [m.label]: !s[m.label] }))
                 }
+                colors={colors}
               />
             ))}
           </ChipRow>
         </Section>
-        <Section title="Cuisine">
+        <Section title="Cuisine" colors={colors}>
           <ChipRow>
             {CUISINES.map(({ icon, label }) => (
               <PrefChip
@@ -115,11 +129,12 @@ export default function PrefsScreen() {
                 onToggle={() =>
                   setCuisine((s) => ({ ...s, [label]: !s[label] }))
                 }
+                colors={colors}
               />
             ))}
           </ChipRow>
         </Section>
-        <Section title="Price Range">
+        <Section title="Price Range" colors={colors}>
           <View style={styles.priceRow}>
             {[0, 1, 2].map((i) => (
               <Pressable
@@ -127,12 +142,14 @@ export default function PrefsScreen() {
                 onPress={() => setPrice(i)}
                 style={[
                   styles.priceTile,
+                  { borderColor: colors.border, backgroundColor: colors.cream2 },
                   price === i && styles.priceTileOn,
                 ]}
               >
                 <Text
                   style={[
                     styles.priceText,
+                    { color: colors.dark },
                     price === i && styles.priceTextOn,
                   ]}
                 >
@@ -143,8 +160,8 @@ export default function PrefsScreen() {
           </View>
         </Section>
       </ScrollView>
-      <View style={[styles.footer, { paddingBottom: insets.bottom + 16 }]}>
-        <Pressable style={styles.showBtn} onPress={finish}>
+      <View style={[styles.footer, { paddingBottom: insets.bottom + 16, backgroundColor: colors.cream }]}>
+        <Pressable style={[styles.showBtn, { backgroundColor: colors.red }]} onPress={finish}>
           <Text style={styles.showBtnText}>Explore</Text>
         </Pressable>
       </View>
@@ -155,13 +172,15 @@ export default function PrefsScreen() {
 function Section({
   title,
   children,
+  colors,
 }: {
   title: string;
   children: React.ReactNode;
+  colors: ReturnType<typeof useApp>["colors"];
 }) {
   return (
     <View style={{ marginBottom: 16, paddingHorizontal: 20 }}>
-      <Text style={styles.sectionLbl}>{title}</Text>
+      <Text style={[styles.sectionLbl, { color: colors.light }]}>{title}</Text>
       {children}
     </View>
   );
@@ -178,36 +197,43 @@ function PrefChip({
   label,
   on,
   onToggle,
+  colors,
 }: {
   icon: IconSpec;
   label: string;
   on: boolean;
   onToggle: () => void;
+  colors: ReturnType<typeof useApp>["colors"];
 }) {
   return (
     <Pressable
       onPress={onToggle}
-      style={[styles.chip, on && styles.chipOn]}
+      style={[
+        styles.chip,
+        { borderColor: colors.border, backgroundColor: colors.cream2 },
+        on && styles.chipOn,
+        on && { borderColor: colors.red, backgroundColor: colors.redLight },
+      ]}
     >
       <Text>
         {icon.lib === "ion" ? (
-          <Ionicons name={icon.name} size={15} color={FF.med} style={styles.chipIcon} />
+          <Ionicons name={icon.name} size={15} color={colors.med} style={styles.chipIcon} />
         ) : (
           <MaterialCommunityIcons
             name={icon.name}
             size={15}
-            color={FF.med}
+            color={colors.med}
             style={styles.chipIcon}
           />
         )}
-        <Text style={styles.chipLabel}> {label}</Text>
+        <Text style={[styles.chipLabel, { color: colors.dark }]}> {label}</Text>
       </Text>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: FF.cream },
+  root: { flex: 1 },
   header: {
     flexDirection: "row",
     alignItems: "center",
@@ -216,7 +242,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   back: { fontSize: 28, fontWeight: "700", color: FF.dark },
-  headerTitle: { fontSize: 17, fontWeight: "800", color: FF.dark },
+  headerTitle: { fontSize: 17, fontWeight: "800" },
   sectionLbl: {
     fontSize: 11,
     fontWeight: "800",
@@ -239,7 +265,7 @@ const styles = StyleSheet.create({
     backgroundColor: FF.redLight,
   },
   chipIcon: { marginRight: 2 },
-  chipLabel: { fontSize: 14, fontWeight: "700", color: FF.dark },
+  chipLabel: { fontSize: 14, fontWeight: "700" },
   priceRow: { flexDirection: "row", gap: 12 },
   priceTile: {
     flex: 1,
@@ -251,7 +277,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   priceTileOn: { backgroundColor: FF.red },
-  priceText: { fontSize: 20, fontWeight: "900", color: FF.dark },
+  priceText: { fontSize: 20, fontWeight: "900" },
   priceTextOn: { color: "#fff" },
   footer: {
     position: "absolute",

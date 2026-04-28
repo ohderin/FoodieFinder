@@ -11,7 +11,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Clipboard from "expo-clipboard";
 import { Restaurant } from "../data/sampleRestaurant";
-import { FF } from "../theme/colors";
+import { useApp } from "../context/AppContext";
 
 type Props = {
   visible: boolean;
@@ -21,6 +21,7 @@ type Props = {
 
 export function DirectionsSheet({ visible, restaurant, onClose }: Props) {
   const insets = useSafeAreaInsets();
+  const { colors } = useApp();
 
   const openAppleMaps = () => {
     const q = encodeURIComponent(restaurant.address);
@@ -51,12 +52,12 @@ export function DirectionsSheet({ visible, restaurant, onClose }: Props) {
     <Modal visible={visible} animationType="slide" transparent>
       <Pressable style={styles.overlay} onPress={onClose}>
         <Pressable
-          style={[styles.sheet, { paddingBottom: Math.max(insets.bottom, 16) }]}
+          style={[styles.sheet, { paddingBottom: Math.max(insets.bottom, 16), backgroundColor: colors.cream2 }]}
           onPress={(e) => e.stopPropagation()}
         >
           <View style={styles.handle} />
-          <Text style={styles.title}>Get Directions</Text>
-          <Text style={styles.sub}>
+          <Text style={[styles.title, { color: colors.dark }]}>Get Directions</Text>
+          <Text style={[styles.sub, { color: colors.med }]}>
             {restaurant.name} · {restaurant.address} · {restaurant.distanceMiles.toFixed(1)} mi
           </Text>
           <ScrollView style={styles.list}>
@@ -65,23 +66,26 @@ export function DirectionsSheet({ visible, restaurant, onClose }: Props) {
               title="Apple Maps"
               subtitle="Open in Maps"
               onPress={openAppleMaps}
+              colors={colors}
             />
             <Row
               icon="🗺️"
               title="Google Maps"
               subtitle="Open in Google Maps"
               onPress={openGoogleMaps}
+              colors={colors}
             />
-            <Row icon="🧭" title="Waze" subtitle="Open in Waze" onPress={openWaze} />
+            <Row icon="🧭" title="Waze" subtitle="Open in Waze" onPress={openWaze} colors={colors} />
             <Row
               icon="📋"
               title="Copy Address"
               subtitle={restaurant.address}
               onPress={copyAddress}
+              colors={colors}
             />
           </ScrollView>
           <Pressable style={styles.cancel} onPress={onClose}>
-            <Text style={styles.cancelText}>Cancel</Text>
+            <Text style={[styles.cancelText, { color: colors.red }]}>Cancel</Text>
           </Pressable>
         </Pressable>
       </Pressable>
@@ -94,18 +98,20 @@ function Row({
   title,
   subtitle,
   onPress,
+  colors,
 }: {
   icon: string;
   title: string;
   subtitle: string;
   onPress: () => void;
+  colors: ReturnType<typeof useApp>["colors"];
 }) {
   return (
-    <Pressable style={styles.row} onPress={onPress}>
+    <Pressable style={[styles.row, { borderBottomColor: colors.border }]} onPress={onPress}>
       <Text style={styles.rowIcon}>{icon}</Text>
       <View style={{ flex: 1 }}>
-        <Text style={styles.rowTitle}>{title}</Text>
-        <Text style={styles.rowSub}>{subtitle}</Text>
+        <Text style={[styles.rowTitle, { color: colors.dark }]}>{title}</Text>
+        <Text style={[styles.rowSub, { color: colors.med }]}>{subtitle}</Text>
       </View>
     </Pressable>
   );
@@ -137,11 +143,9 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: "800",
     textAlign: "center",
-    color: FF.dark,
   },
   sub: {
     fontSize: 12,
-    color: FF.med,
     textAlign: "center",
     marginBottom: 12,
   },
@@ -151,15 +155,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 14,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: FF.border,
+    borderBottomColor: "#ddd",
   },
   rowIcon: { fontSize: 22, marginRight: 12 },
-  rowTitle: { fontSize: 16, fontWeight: "600", color: FF.dark },
-  rowSub: { fontSize: 13, color: FF.med },
+  rowTitle: { fontSize: 16, fontWeight: "600" },
+  rowSub: { fontSize: 13 },
   cancel: {
     marginTop: 12,
     paddingVertical: 14,
     alignItems: "center",
   },
-  cancelText: { fontSize: 16, fontWeight: "600", color: FF.red },
+  cancelText: { fontSize: 16, fontWeight: "600" },
 });

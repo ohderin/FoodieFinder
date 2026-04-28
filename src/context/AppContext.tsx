@@ -1,10 +1,12 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { type Restaurant } from "../../src/data/sampleRestaurant";
+import { getFFColors, type FFColors } from "../theme/colors";
 
 const ONBOARDING_KEY = "foodie.hasCompletedOnboarding";
 const VIBE_PREFS_KEY = "foodie.vibePreferences";
 const HEARTED_KEY = "foodie.heartedRestaurants";
+const DARK_MODE_KEY = "foodie.darkMode";
 
 export type VibePreferences = {
   meals: string[];
@@ -17,6 +19,9 @@ type AppContextValue = {
   ready: boolean;
   hasCompletedOnboarding: boolean;
   vibePreferences: VibePreferences | null;
+  isDarkMode: boolean;
+  colors: FFColors;
+  setDarkMode: (enabled: boolean) => Promise<void>;
   completeOnboarding: () => Promise<void>;
   saveVibePreferences: (prefs: VibePreferences) => Promise<void>;
   resetOnboarding: () => Promise<void>;
@@ -32,17 +37,20 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
   const [vibePreferences, setVibePreferences] = useState<VibePreferences | null>(null);
   const [hearted, setHearted] = useState<Restaurant[]>([]);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [heartedHydrated, setHeartedHydrated] = useState(false);
 
   useEffect(() => {
     (async () => {
       try {
-        const [onboardingValue, vibePrefsValue, heartedValue] = await Promise.all([
+        const [onboardingValue, vibePrefsValue, heartedValue, darkModeValue] = await Promise.all([
           AsyncStorage.getItem(ONBOARDING_KEY),
           AsyncStorage.getItem(VIBE_PREFS_KEY),
           AsyncStorage.getItem(HEARTED_KEY),
+          AsyncStorage.getItem(DARK_MODE_KEY),
         ]);
         setHasCompletedOnboarding(onboardingValue === "1");
+        setIsDarkMode(darkModeValue === "1");
         if (vibePrefsValue) {
           try {
             const parsed = JSON.parse(vibePrefsValue) as VibePreferences;
@@ -92,6 +100,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setVibePreferences(prefs);
   }, []);
 
+  const setDarkMode = useCallback(async (enabled: boolean) => {
+    await AsyncStorage.setItem(DARK_MODE_KEY, enabled ? "1" : "0");
+    setIsDarkMode(enabled);
+  }, []);
+
   const resetOnboarding = useCallback(async () => {
     await Promise.all([
       AsyncStorage.removeItem(ONBOARDING_KEY),
@@ -120,6 +133,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       ready,
       hasCompletedOnboarding,
       vibePreferences,
+      isDarkMode,
+      colors: getFFColors(isDarkMode),
+      setDarkMode,
       completeOnboarding,
       saveVibePreferences,
       resetOnboarding,
@@ -131,6 +147,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       ready,
       hasCompletedOnboarding,
       vibePreferences,
+      isDarkMode,
+      setDarkMode,
       completeOnboarding,
       saveVibePreferences,
       resetOnboarding,

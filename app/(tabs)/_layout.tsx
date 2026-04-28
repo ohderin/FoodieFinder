@@ -1,21 +1,24 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { View } from "react-native";
-import { FF } from "../../src/theme/colors";
+import { useApp } from "../../src/context/AppContext";
 
 export default function TabsLayout() {
+  const { colors } = useApp();
+
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: FF.red,
-        tabBarInactiveTintColor: FF.med,
+        tabBarActiveTintColor: colors.red,
+        tabBarInactiveTintColor: colors.med,
         headerShown: false,
         tabBarStyle: {
           backgroundColor: "transparent",
-          borderTopColor: "rgba(0,0,0,0.18)",
+          borderTopColor: colors.border,
           borderTopWidth: 1,
         },
-        tabBarBackground: () => <View style={{ flex: 1, backgroundColor: "rgba(255,248,240,0.88)" }} />,
+        sceneStyle: { backgroundColor: colors.cream },
+        tabBarBackground: () => <View style={{ flex: 1, backgroundColor: colors.cream2 }} />,
       }}
     >
       <Tabs.Screen
