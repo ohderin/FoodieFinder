@@ -105,17 +105,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const addHeart = useCallback((res: Restaurant) => {
     setHearted((prev) => {
-      if (prev.find((item) => item.id === res.id)) return prev;
-      return [...prev, res];
-    });
-  }, []);
-
-  const removeHeart = useCallback((id: string) => {
-    setHearted((prev) => prev.filter((item) => item.id !== id));
-  }, []);
-
-  const addHeart = useCallback((res: Restaurant) => {
-    setHearted((prev) => {
       // Check for duplicates based on the Restaurant ID
       if (prev.find((item) => item.id === res.id)) return prev;
       return [...prev, res];

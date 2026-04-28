@@ -17,7 +17,6 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { DirectionsSheet } from "../../src/components/DirectionsSheet";
-import { useApp } from "../../src/context/AppContext";
 import { RESTAURANT_POOL, SAMPLE_RESTAURANT, type Restaurant } from "../../src/data/sampleRestaurant";
 import { FF } from "../../src/theme/colors";
 
