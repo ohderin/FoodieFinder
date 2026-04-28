@@ -63,7 +63,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     diningStyles: ["Dine-in", "Takeout", "Delivery"],
     cuisineTags: ["Burgers", "Salads", "Chicken"],
     imageUrl:
-      "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=1300&q=80",
+      "https://u.realgeeks.media/terryandlaurie/Walk-On-Bistro.jpg",
   },
   {
     id: "tsunami",
@@ -83,7 +83,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     diningStyles: ["Dine-in", "Takeout"],
     cuisineTags: ["Sushi", "Salads"],
     imageUrl:
-      "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1300&q=80",
+      "https://s47725.pcdn.co/wp-content/uploads/2024/04/TsunamiHighland-27.jpg",
   },
   {
     id: "parrains",
@@ -103,7 +103,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     diningStyles: ["Dine-in", "Takeout"],
     cuisineTags: ["Salads"],
     imageUrl:
-      "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1300&q=80",
+      "https://media-cdn.tripadvisor.com/media/photo-s/12/41/24/6c/photo0jpg.jpg",
   },
   {
     id: "mestizo",
@@ -123,7 +123,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     diningStyles: ["Dine-in", "Takeout", "Delivery"],
     cuisineTags: ["Mexican", "Salads"],
     imageUrl:
-      "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1300&q=80",
+      "https://photos.bringfido.com/restaurants/4/2/3/107324/107324_35523544.jpg?size=slide&density=1x",
   },
   {
     id: "beausoleil",
@@ -143,7 +143,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     diningStyles: ["Dine-in", "Takeout"],
     cuisineTags: ["Salads"],
     imageUrl:
-      "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1300&q=80",
+      "https://bpprodstorage.blob.core.windows.net/bpblobcontainer/4653918/images/2c819efd-d70d-45e2-b738-921e4eced8101jzoRuorAJMttFlwEUqqXcqaeaoHfbCTSsqqUIrDihCEVQNCVnsbWK3XjVbX8wRLh8WHrDfAw8ksC-TQnA=s0.Jpeg",
   },
   {
     id: "the-chimes",
@@ -162,7 +162,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout"],
     cuisineTags: ["Burgers", "Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://thechimes.com/wp-content/uploads/2020/03/chimes-ext1.jpg",
   },
   {
     id: "louies-cafe",
@@ -181,7 +181,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Breakfast", "Lunch", "Dinner", "Dessert"],
     diningStyles: ["Dine-in", "Takeout"],
     cuisineTags: ["Burgers", "Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhNGi2doX0tqo9wLhjjs1V9Y8YyBjzHZsIR65LHl2R4LovIG3SMVFTBeLtJTV3uF8plslJrThzTPKN8t2c3sPBz5GT0LqxmnE-iYb05R4b5G5VmsVhwZJMoR2QvXBwBhE7M8rHzGymqImE/w1200-h630-p-k-no-nu/Louie's+Cafe.jpg",
   },
   {
     id: "overpass-merchant",
@@ -200,7 +200,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Breakfast", "Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout"],
     cuisineTags: ["Salads", "Burgers"],
-    imageUrl: "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://images.squarespace-cdn.com/content/v1/6181b50dc46c955b5b60ec4f/e2cae460-8d98-440f-804a-0a0350df7962/hm_web-photo_07.jpg",
   },
   {
     id: "elsies-plate-pie",
@@ -219,7 +219,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner", "Dessert"],
     diningStyles: ["Dine-in", "Takeout"],
     cuisineTags: ["Salads", "Burgers"],
-    imageUrl: "https://images.unsplash.com/photo-1464454709131-ffd692591ee5?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2d/26/09/47/caption.jpg?w=1100&h=1100&s=1",
   },
   {
     id: "curbside",
@@ -238,7 +238,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner", "Dessert"],
     diningStyles: ["Dine-in", "Takeout", "Delivery"],
     cuisineTags: ["Burgers", "Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://developingbatonrouge.com/wp-content/uploads/2016/10/Curbside102616.jpg",
   },
   {
     id: "city-pork",
@@ -257,7 +257,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Breakfast", "Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout"],
     cuisineTags: ["Salads", "Burgers"],
-    imageUrl: "https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://tse1.mm.bing.net/th/id/OIP.rjVplegVS3eCMo3F-Dm0eQHaHZ?r=0&cb=thfc1&rs=1&pid=ImgDetMain&o=7&rm=3",
   },
   {
     id: "albasha",
@@ -276,7 +276,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout", "Delivery"],
     cuisineTags: ["Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1543339308-43e59d6b73a6?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1c/61/62/cd/photo7jpg.jpg?w=1200&h=-1&s=1",
   },
   {
     id: "cava",
@@ -295,7 +295,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout", "Delivery"],
     cuisineTags: ["Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1625943553852-781c6dd46faa?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://media.licdn.com/dms/image/v2/D4E10AQGNjpgOBRLaiw/image-shrink_1280/image-shrink_1280/0/1700253391954?e=2147483647&v=beta&t=R573Rcn27nE17RSFNA-IUQo1D-Q1cq0Sbt6iqjNMggI",
   },
   {
     id: "superior-grill",
@@ -314,7 +314,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout"],
     cuisineTags: ["Mexican", "Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://resizer.otstatic.com/v2/photos/large/25868264.jpg",
   },
   {
     id: "izzos",
@@ -333,7 +333,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout", "Delivery"],
     cuisineTags: ["Mexican", "Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://tse1.mm.bing.net/th/id/OIP.BAvGI6QqcBjVGjcpOoWGzgHaI3?r=0&cb=thfc1&rs=1&pid=ImgDetMain&o=7&rm=3",
   },
   {
     id: "govt-taco",
@@ -352,7 +352,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout"],
     cuisineTags: ["Mexican"],
-    imageUrl: "https://images.unsplash.com/photo-1565299507177-b0ac66763828?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://fluxconsole.com/files/image/219531?progressive=1",
   },
   {
     id: "soji",
@@ -371,7 +371,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout"],
     cuisineTags: ["Sushi"],
-    imageUrl: "https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://lh5.googleusercontent.com/p/AF1QipMyUqaH2F1FLJ2je8YuN-abXK825of_bUETVgyT=s1024",
   },
   {
     id: "ichiban",
@@ -390,7 +390,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout", "Delivery"],
     cuisineTags: ["Sushi"],
-    imageUrl: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://s3-media0.fl.yelpcdn.com/bphoto/ZJ3z9IIKA8yhOp-k8zOrDA/o.jpg",
   },
   {
     id: "dragos",
@@ -409,7 +409,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Dinner"],
     diningStyles: ["Dine-in", "Takeout"],
     cuisineTags: ["Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://tse4.mm.bing.net/th/id/OIP.139mx7rnaThiIVQA4rYH8gHaIq?r=0&cb=thfc1&rs=1&pid=ImgDetMain&o=7&rm=3",
   },
   {
     id: "cocha",
@@ -428,7 +428,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Dinner", "Dessert"],
     diningStyles: ["Dine-in", "Takeout"],
     cuisineTags: ["Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1481833761820-0509d3217039?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://cdn.vox-cdn.com/thumbor/VYT2_bOzM5qTBcnIO5hEA8yfmHM=/0x0:2500x1666/1470x1103/filters:focal(1050x633:1450x1033):no_upscale()/cdn.vox-cdn.com/uploads/chorus_image/image/72524427/20170117_160615.0.jpg",
   },
   {
     id: "jubans",
@@ -447,7 +447,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Dinner", "Dessert"],
     diningStyles: ["Dine-in"],
     cuisineTags: ["Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://redstickmom.com/wp-content/uploads/2022/07/jubans-scaled.jpg",
   },
   {
     id: "ruffinos",
@@ -466,7 +466,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Dinner", "Dessert"],
     diningStyles: ["Dine-in", "Takeout"],
     cuisineTags: ["Pizza", "Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1555992336-cbf46e7f31e7?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://th.bing.com/th/id/R.7856aa49206d2557336ec47526ca4e57?rik=Ve%2fYngeomRyJog&riu=http%3a%2f%2fruffinosrestaurant.com%2fwp-content%2fuploads%2f2021%2f11%2fIMG_2595-edit-scaled.jpg&ehk=mLv0xng2X3KZEeqnTZVLdW6khuMPcHPXyZJxwuy3YmM%3d&risl=&pid=ImgRaw&r=0",
   },
   {
     id: "pizza-byronz",
@@ -485,7 +485,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout", "Delivery"],
     cuisineTags: ["Pizza", "Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://tse2.mm.bing.net/th/id/OIP.-4A97xCUQZ10vA2PKJ7SZAHaJQ?r=0&cb=thfc1&rs=1&pid=ImgDetMain&o=7&rm=3",
   },
   {
     id: "rotolos",
@@ -504,7 +504,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout", "Delivery"],
     cuisineTags: ["Pizza", "Salads", "Chicken"],
-    imageUrl: "https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://lh5.googleusercontent.com/p/AF1QipPrda9vhShn8NUfYqhzB107mHHYNkBV1s84jOuK=s1024",
   },
   {
     id: "monjunis",
@@ -523,7 +523,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout"],
     cuisineTags: ["Pizza", "Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1521389508051-d7ffb5dc8f70?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://s3-media0.fl.yelpcdn.com/bphoto/d8wjmwDBVY8RGYtKaJKM_w/o.jpg",
   },
   {
     id: "ginos",
@@ -542,7 +542,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Dinner", "Dessert"],
     diningStyles: ["Dine-in", "Takeout"],
     cuisineTags: ["Pizza", "Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://s3-media0.fl.yelpcdn.com/bphoto/wbSCrzg-ZqIcINRou2-XYw/o.jpg",
   },
   {
     id: "lit-pizza",
@@ -561,7 +561,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout", "Delivery"],
     cuisineTags: ["Pizza", "Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1c/05/f1/c0/photo0jpg.jpg?w=1200&h=-1&s=1",
   },
   {
     id: "another-broken-egg",
@@ -580,7 +580,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Breakfast", "Lunch", "Dessert"],
     diningStyles: ["Dine-in", "Takeout"],
     cuisineTags: ["Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://s3-media0.fl.yelpcdn.com/bphoto/VmdyrVmX6Hnb-04n-2pAzw/o.jpg",
   },
   {
     id: "simple-joes",
@@ -599,7 +599,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Breakfast", "Lunch"],
     diningStyles: ["Dine-in", "Takeout"],
     cuisineTags: ["Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://lh5.googleusercontent.com/p/AF1QipNAZUyJc41erJNMHLtucqEXeUskTiKxU4WGiAa8=s1024",
   },
   {
     id: "coffee-call",
@@ -618,7 +618,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Breakfast", "Dessert"],
     diningStyles: ["Dine-in", "Takeout"],
     cuisineTags: ["Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://s3-media1.fl.yelpcdn.com/bphoto/za3AovfsjKHfcW4dbZBiOA/o.jpg",
   },
   {
     id: "counterspace",
@@ -637,7 +637,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Dessert"],
     diningStyles: ["Takeout"],
     cuisineTags: ["Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://d1dxs113ar9ebd.cloudfront.net/225batonrouge/2022/06/CounterspaceBRNewLocation-4-1.jpg",
   },
   {
     id: "insomnia-cookies",
@@ -656,7 +656,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Dessert"],
     diningStyles: ["Takeout", "Delivery"],
     cuisineTags: ["Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://www.wichitabyeb.com/wp-content/uploads/2023/09/IMG_0092-1536x1152.jpeg",
   },
   {
     id: "five-guys",
@@ -675,7 +675,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout", "Delivery"],
     cuisineTags: ["Burgers"],
-    imageUrl: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://s3-media0.fl.yelpcdn.com/bphoto/UnAlc1yNltHOl1k238xcjA/o.jpg",
   },
   {
     id: "smashburger",
@@ -694,7 +694,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner", "Dessert"],
     diningStyles: ["Dine-in", "Takeout", "Delivery"],
     cuisineTags: ["Burgers"],
-    imageUrl: "https://images.unsplash.com/photo-1553979459-d2229ba7433a?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://bloximages.newyork1.vip.townnews.com/theadvocate.com/content/tncms/assets/v3/editorial/7/3d/73d6b4a6-87b1-11ed-ab7b-2395ae4199eb/63adee8613218.image.jpg?crop=1278%2C1145%2C5%2C272&resize=558%2C500&order=crop%2Cresize",
   },
   {
     id: "whataburger",
@@ -713,7 +713,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout", "Delivery"],
     cuisineTags: ["Burgers", "Chicken"],
-    imageUrl: "https://images.unsplash.com/photo-1550317138-10000687a72b?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://th.bing.com/th/id/R.78d204c1fe41b4fd0ddeca593f20a282?rik=e%2bzJHzmxQhUK8Q&pid=ImgRaw&r=0",
   },
   {
     id: "chipotle-highland",
@@ -732,7 +732,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout", "Delivery"],
     cuisineTags: ["Mexican", "Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://s3-media0.fl.yelpcdn.com/bphoto/Fx12XCPaIq738PFY5v9uww/o.jpg",
   },
   {
     id: "moes",
@@ -751,7 +751,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout", "Delivery"],
     cuisineTags: ["Mexican"],
-    imageUrl: "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://www.shopfood.com/wp-content/uploads/2023/03/moes-menu-1200x80-main.jpg",
   },
   {
     id: "sushimasa",
@@ -770,7 +770,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout"],
     cuisineTags: ["Sushi"],
-    imageUrl: "https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://resizer.otstatic.com/v3/photos/73299378-2?width=1280&height=720&webp=true",
   },
   {
     id: "rockn-sake",
@@ -789,7 +789,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Dinner"],
     diningStyles: ["Dine-in", "Takeout"],
     cuisineTags: ["Sushi"],
-    imageUrl: "https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://rocknsake.com/wp-content/uploads/2023/08/RNS-7-27-2023-Web-0152.jpg",
   },
   {
     id: "mod-pizza",
@@ -808,7 +808,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout", "Delivery"],
     cuisineTags: ["Pizza", "Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://menupricestoday.com/featured-images/185.jpg",
   },
   {
     id: "reginellis",
@@ -827,7 +827,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout", "Delivery"],
     cuisineTags: ["Pizza", "Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://s3-media0.fl.yelpcdn.com/bphoto/PdWRJGttp8fznrp8J48jsA/o.jpg",
   },
   {
     id: "zees-salads",
@@ -846,7 +846,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout"],
     cuisineTags: ["Chicken", "Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://s3-media0.fl.yelpcdn.com/bphoto/AniVCvBEnCTJgWKYjRvoIw/o.jpg",
   },
   {
     id: "fresh-junkie",
@@ -865,7 +865,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Breakfast", "Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout", "Delivery"],
     cuisineTags: ["Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://d1dxs113ar9ebd.cloudfront.net/225batonrouge/2016/01/225FreshJunkie_007_COLOR.jpg",
   },
   {
     id: "sweetgreen-br",
@@ -884,7 +884,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout", "Delivery"],
     cuisineTags: ["Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://s3-media0.fl.yelpcdn.com/bphoto/w97A1dRr2b6zfr75Go3J5g/o.jpg",
   },
   {
     id: "chickfila-highland",
@@ -903,7 +903,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Breakfast", "Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout", "Delivery"],
     cuisineTags: ["Chicken", "Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1606755962773-d324e0a13086?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://s3-media0.fl.yelpcdn.com/bphoto/IFvXpZc0Gu-HeMcfPfnA5g/o.jpg",
   },
   {
     id: "canes-lee",
@@ -922,7 +922,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout", "Delivery"],
     cuisineTags: ["Chicken"],
-    imageUrl: "https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://s3-media0.fl.yelpcdn.com/bphoto/QxaZV7JDgwHb4NtYLXiiPw/o.jpg",
   },
   {
     id: "pluckers",
@@ -941,7 +941,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout", "Delivery"],
     cuisineTags: ["Chicken", "Burgers"],
-    imageUrl: "https://images.unsplash.com/photo-1527477396000-e27163b481c2?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://uploads-ssl.webflow.com/592740e995c3096bba010fd0/5b9aaff5099d0955dabd569f_meta-image-lrg.jpg",
   },
   {
     id: "mid-city-beer-garden",
@@ -960,7 +960,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout"],
     cuisineTags: ["Burgers", "Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1457460866886-40ef8d4b42a0?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://s25562.pcdn.co/wp-content/uploads/2020/10/Mid-City-Beer-Garden-1-scaled.jpg.optimal.jpg",
   },
   {
     id: "magpie-cafe",
@@ -979,7 +979,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Breakfast", "Lunch", "Dessert"],
     diningStyles: ["Dine-in", "Takeout"],
     cuisineTags: ["Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://dastylishfoodie.com/wp-content/uploads/2017/01/IMG_3712-960x1280.jpg",
   },
   {
     id: "fat-cow",
@@ -998,7 +998,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout", "Delivery"],
     cuisineTags: ["Burgers", "Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://tse3.mm.bing.net/th/id/OIP.dQHTopKeAA1E3dwLa5sFTAHaF9?r=0&cb=thfc1&rs=1&pid=ImgDetMain&o=7&rm=3",
   },
   {
     id: "calientemex",
@@ -1017,7 +1017,7 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout", "Delivery"],
     cuisineTags: ["Mexican"],
-    imageUrl: "https://images.unsplash.com/photo-1552332386-f8dd00dc2f85?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://d1dxs113ar9ebd.cloudfront.net/225batonrouge/2023/09/225-FoodTruckRoundup-2023_011-copy.jpg",
   },
   {
     id: "salad-station",
@@ -1036,6 +1036,6 @@ export const RESTAURANT_POOL: Restaurant[] = [
     mealTags: ["Lunch", "Dinner"],
     diningStyles: ["Dine-in", "Takeout", "Delivery"],
     cuisineTags: ["Salads"],
-    imageUrl: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1300&q=80",
+    imageUrl: "https://tse1.mm.bing.net/th/id/OIP.kT8bKBh80hPvdslespbrqwHaE7?r=0&cb=thfc1&rs=1&pid=ImgDetMain&o=7&rm=3",
   },
 ];
