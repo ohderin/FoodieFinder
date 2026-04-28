@@ -11,6 +11,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -18,6 +19,9 @@ import { DirectionsSheet } from "../../src/components/DirectionsSheet";
 import { useApp } from "../../src/context/AppContext";
 import { RESTAURANT_POOL, SAMPLE_RESTAURANT, type Restaurant } from "../../src/data/sampleRestaurant";
 import { FF } from "../../src/theme/colors";
+
+
+
 
 const FILTERS = ["Nearby", "Open Now", "$$$", "$$", "$"];
 const DEFAULT_RESTAURANT_BG_URI =
@@ -142,7 +146,8 @@ export default function DiscoverScreen() {
   const [prefsHydrated, setPrefsHydrated] = useState(false);
   const swipe = useRef(new Animated.ValueXY()).current;
   const prefsRef = useRef<SwipePrefs>(INITIAL_PREFS);
-
+  const [searchTEXT, setSearchText] = useState("");
+  
   useEffect(() => {
     (async () => {
       try {
@@ -220,17 +225,30 @@ export default function DiscoverScreen() {
     return next;
   }, [distanceByRestaurantId, filters]);
 
-  const vibeFilteredRestaurants = useMemo(() => {
-    if (!vibePreferences) return filteredRestaurants;
-    const narrowed = filteredRestaurants.filter((restaurant) => {
-      if (restaurant.priceLevel !== vibePreferences.priceLevel) return false;
-      if (!overlaps(vibePreferences.meals, restaurant.mealTags)) return false;
-      if (!overlaps(vibePreferences.styles, restaurant.diningStyles)) return false;
-      if (!overlaps(vibePreferences.cuisines, restaurant.cuisineTags)) return false;
-      return true;
-    });
-    return narrowed.length > 0 ? narrowed : filteredRestaurants;
-  }, [filteredRestaurants, vibePreferences]);
+const vibeFilteredRestaurants = useMemo(() => {
+  let candidates = filteredRestaurants;
+  
+  if (searchTEXT.trim()) {
+    const lower = searchTEXT.toLowerCase();
+    candidates = candidates.filter((restaurant) =>
+      restaurant.name.toLowerCase().includes(lower) ||
+      restaurant?.cuisineTags?.some((tag) => tag.toLowerCase().includes(lower)) ||
+      restaurant?.tags?.some((tag) => tag.toLowerCase().includes(lower))
+    );
+  }
+  
+  if (!vibePreferences) return candidates;
+  
+  const narrowed = candidates.filter((restaurant) => {
+    if (restaurant.priceLevel !== vibePreferences.priceLevel) return false;
+    if (!overlaps(vibePreferences.meals, restaurant.mealTags)) return false;
+    if (!overlaps(vibePreferences.styles, restaurant.diningStyles)) return false;
+    if (!overlaps(vibePreferences.cuisines, restaurant.cuisineTags)) return false;
+    return true;
+  });
+  
+  return narrowed.length > 0 ? narrowed : candidates;
+}, [filteredRestaurants, vibePreferences, searchTEXT]);
 
   const strictVibeMatchedIds = useMemo(() => {
     if (!vibePreferences) return new Set<string>();
@@ -361,7 +379,13 @@ export default function DiscoverScreen() {
         <View style={styles.glassFill} />
         <View style={styles.searchContent}>
           <Ionicons name="search" size={16} color={FF.light} />
-          <Text style={styles.searchPh}>Search restaurants, dishes...</Text>
+           <TextInput
+      placeholder="Search categories, cuisines..."
+      value={searchTEXT}
+      onChangeText={setSearchText}
+         placeholderTextColor={FF.light}
+         style={styles.searchInput}
+          />
         </View>
       </View>
 
@@ -520,6 +544,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.12,
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 6 },
+  },
+  searchInput: {
+    flex: 1,
+    color: FF.dark,
+    fontSize: 15,
   },
   searchContent: {
     flexDirection: "row",
