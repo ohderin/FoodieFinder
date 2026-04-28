@@ -1,7 +1,7 @@
 import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SAMPLE_RESTAURANT } from "../src/data/sampleRestaurant";
-import { FF } from "../src/theme/colors";
+import { useApp } from "../src/context/AppContext";
 
 const REVIEWS = [
   { initials: "JD", name: "John Doe", stars: "⭐⭐⭐⭐⭐", text: "I wanna get married here. The sauce hits different every single time." },
@@ -13,9 +13,11 @@ const BAR = [0.6, 0.22, 0.1, 0.05, 0.03];
 
 export default function ReviewsScreen() {
   const r = SAMPLE_RESTAURANT;
+  const { colors } = useApp();
+  const styles = React.useMemo(() => createStyles(colors), [colors]);
 
   return (
-      <ScrollView style={{ flex: 1, backgroundColor: FF.cream }} contentContainerStyle={{ padding: 16 }}>
+      <ScrollView style={{ flex: 1, backgroundColor: colors.cream }} contentContainerStyle={{ padding: 16 }}>
         <View style={styles.summary}>
           <View style={{ alignItems: "center" }}>
             <Text style={styles.bigNum}>{r.rating.toFixed(1)}</Text>
@@ -53,47 +55,47 @@ export default function ReviewsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ReturnType<typeof useApp>["colors"]) => StyleSheet.create({
   summary: {
     flexDirection: "row",
-    backgroundColor: "#fff",
+    backgroundColor: colors.cream2,
     borderRadius: 16,
     padding: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: FF.border,
+    borderColor: colors.border,
   },
-  bigNum: { fontSize: 44, fontWeight: "900", color: FF.dark },
-  reviewCount: { fontSize: 12, color: FF.med, marginTop: 4 },
+  bigNum: { fontSize: 44, fontWeight: "900", color: colors.dark },
+  reviewCount: { fontSize: 12, color: colors.med, marginTop: 4 },
   barRow: { flexDirection: "row", alignItems: "center", marginBottom: 6, gap: 8 },
-  barLbl: { width: 14, fontSize: 11, color: FF.med },
+  barLbl: { width: 14, fontSize: 11, color: colors.med },
   track: {
     flex: 1,
     height: 8,
     borderRadius: 4,
-    backgroundColor: FF.border,
+    backgroundColor: colors.border,
     overflow: "hidden",
   },
-  fill: { height: "100%", backgroundColor: FF.golden },
+  fill: { height: "100%", backgroundColor: colors.golden },
   review: {
-    backgroundColor: "#fff",
+    backgroundColor: colors.cream2,
     borderRadius: 16,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: FF.border,
+    borderColor: colors.border,
   },
   revHead: { flexDirection: "row", gap: 10, marginBottom: 8 },
   revAvatar: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: FF.redLight,
+    backgroundColor: colors.redLight,
     alignItems: "center",
     justifyContent: "center",
   },
-  revAvText: { fontWeight: "900", color: FF.redDark, fontSize: 12 },
-  revName: { fontWeight: "700", fontSize: 15 },
-  revMeta: { fontSize: 12, color: FF.med },
-  revBody: { fontSize: 15, color: FF.med, lineHeight: 22 },
+  revAvText: { fontWeight: "900", color: colors.redDark, fontSize: 12 },
+  revName: { fontWeight: "700", fontSize: 15, color: colors.dark },
+  revMeta: { fontSize: 12, color: colors.med },
+  revBody: { fontSize: 15, color: colors.med, lineHeight: 22 },
 });

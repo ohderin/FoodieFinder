@@ -1,5 +1,5 @@
 /** Hi-Fi palette (WCAG AA reds). */
-export const FF = {
+export const FF_LIGHT = {
   red: "#e63946",
   redLight: "#FDE8EA",
   redDark: "#8F1D27",
@@ -13,3 +13,26 @@ export const FF = {
   border: "#E8D9C8",
   green: "#2D7D46",
 } as const;
+
+export const FF_DARK = {
+  red: "#ff5a67",
+  redLight: "#4A1F24",
+  redDark: "#FFB1B9",
+  orange: "#FF9B45",
+  golden: "#ffd166",
+  cream: "#121212",
+  cream2: "#1D1D1D",
+  dark: "#F5F1EA",
+  med: "#D3C5B8",
+  light: "#A49485",
+  border: "#3A332D",
+  green: "#52B56A",
+} as const;
+
+export type FFColors = typeof FF_LIGHT;
+
+export function getFFColors(isDarkMode: boolean): FFColors {
+  return isDarkMode ? FF_DARK : FF_LIGHT;
+}
+
+export const FF = FF_LIGHT;

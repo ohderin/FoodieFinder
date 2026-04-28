@@ -4,10 +4,11 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MascotBlob } from "../../src/components/MascotBlob";
-import { FF } from "../../src/theme/colors";
+import { useApp } from "../../src/context/AppContext";
 
 export default function LocationScreen() {
   const insets = useSafeAreaInsets();
+  const { colors } = useApp();
 
   const allow = async () => {
     await Location.requestForegroundPermissionsAsync();
@@ -19,21 +20,21 @@ export default function LocationScreen() {
   };
 
   return (
-    <View style={[styles.root, { paddingTop: insets.top + 8, paddingBottom: insets.bottom + 24 }]}>
+    <View style={[styles.root, { paddingTop: insets.top + 8, paddingBottom: insets.bottom + 24, backgroundColor: colors.cream }]}>
       <MascotBlob />
       <View style={styles.logoBlock}>
-        <Text style={styles.logo}>Foodie</Text>
+        <Text style={[styles.logo, { color: colors.red }]}>Foodie</Text>
       </View>
       <View style={{ flex: 1 }} />
-      <View style={styles.sheet}>
-        <View style={styles.sheetHead}>
+      <View style={[styles.sheet, { backgroundColor: colors.cream2 }]}>
+        <View style={[styles.sheetHead, { backgroundColor: colors.red }]}>
           <Text style={styles.sheetTitle}>Allow Foodie to access your location?</Text>
           <Text style={styles.sheetDesc}>Used only to show restaurants near you</Text>
         </View>
         <View>
-          <ActionRow title="Allow While Using the App" onPress={allow} />
-          <ActionRow title="Allow Once" onPress={allow} />
-          <ActionRow title="Don't Allow" danger onPress={deny} />
+          <ActionRow title="Allow While Using the App" onPress={allow} colors={colors} />
+          <ActionRow title="Allow Once" onPress={allow} colors={colors} />
+          <ActionRow title="Don't Allow" danger onPress={deny} colors={colors} />
         </View>
       </View>
     </View>
@@ -44,15 +45,17 @@ function ActionRow({
   title,
   onPress,
   danger,
+  colors,
 }: {
   title: string;
   onPress: () => void;
   danger?: boolean;
+  colors: ReturnType<typeof useApp>["colors"];
 }) {
   return (
     <Text
       onPress={onPress}
-      style={[styles.row, danger && { color: FF.red, fontWeight: "700" }]}
+      style={[styles.row, { color: colors.dark, borderBottomColor: colors.border }, danger && { color: colors.red, fontWeight: "700" }]}
     >
       {title}
     </Text>
@@ -60,9 +63,9 @@ function ActionRow({
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: FF.cream, alignItems: "center" },
+  root: { flex: 1, alignItems: "center" },
   logoBlock: { alignItems: "center", marginTop: 14 },
-  logo: { fontSize: 36, fontWeight: "900", color: FF.red },
+  logo: { fontSize: 36, fontWeight: "900" },
   sheet: {
     width: "100%",
     maxWidth: 400,
@@ -77,7 +80,6 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   sheetHead: {
-    backgroundColor: FF.red,
     paddingVertical: 22,
     paddingHorizontal: 20,
     alignItems: "center",
@@ -96,7 +98,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     fontSize: 16,
     fontWeight: "500",
-    color: FF.dark,
+    color: "#000",
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: "#f0e8e0",
   },

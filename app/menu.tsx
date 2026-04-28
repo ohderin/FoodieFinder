@@ -3,12 +3,12 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useState, useMemo } from "react";
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SAMPLE_RESTAURANT } from "../src/data/sampleRestaurant";
-import { FF } from "../src/theme/colors";
 import { getRestaurantTheme } from "../src/data/restaurantColors";
 import { useLocalSearchParams } from "expo-router";
 import { RESTAURANT_POOL } from "../src/data/sampleRestaurant";
 import { getMenuForRestaurant } from "../src/data/restaurantMenus";
 import { getIconForRestaurant } from "../src/data/restaurantEmoji";
+import { useApp } from "../src/context/AppContext";
 
 function hexToRgb(hex: string) {
   const value = hex.replace("#", "");
@@ -60,6 +60,7 @@ function makeReadableBannerColor(base: string, minWhiteContrast = 4.5, minDotCon
 
 export default function MenuScreen() {
   const { restaurantId } = useLocalSearchParams<{ restaurantId: string }>();
+  const { colors } = useApp();
 
   // Get restaurant from Restaurant_Pool
   const currentRestaurant =
@@ -114,9 +115,10 @@ export default function MenuScreen() {
       },
     };
   }, [theme]);
+  const styles = useMemo(() => createStyles(colors), [colors]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: FF.cream }}>
+    <View style={{ flex: 1, backgroundColor: colors.cream }}>
       <LinearGradient
         colors={dynamicStyles.banner.colors}
         style={styles.banner}
@@ -175,12 +177,12 @@ export default function MenuScreen() {
               ]}
             >
               {menuIcon.lib === "ion" ? (
-                <Ionicons name={menuIcon.name as React.ComponentProps<typeof Ionicons>["name"]} size={22} color={FF.med} />
+                <Ionicons name={menuIcon.name as React.ComponentProps<typeof Ionicons>["name"]} size={22} color={colors.med} />
               ) : (
                 <MaterialCommunityIcons
                   name={menuIcon.name as React.ComponentProps<typeof MaterialCommunityIcons>["name"]}
                   size={22}
-                  color={FF.med}
+                  color={colors.med}
                 />
               )}
             </View>
@@ -205,7 +207,7 @@ export default function MenuScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ReturnType<typeof useApp>["colors"]) => StyleSheet.create({
   banner: { padding: 20 },
   bannerRow: {
     flexDirection: "row",
@@ -234,7 +236,7 @@ const styles = StyleSheet.create({
   catRow: {
     paddingHorizontal: 14,
     paddingTop: 6,
-    paddingBottom: 16,
+    paddingBottom: 6,
     gap: 8,
     flexDirection: "row",
     alignItems: "center",
@@ -255,20 +257,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 999,
-    backgroundColor: "#fff",
+    backgroundColor: colors.cream2,
+    borderWidth: 1,
+    borderColor: colors.border,
     height: 40,
     justifyContent: "center",
   },
-  catText: { fontWeight: "900", color: FF.dark, fontSize: 14 },
+  catText: { fontWeight: "900", color: colors.dark, fontSize: 14 },
   catTextOn: { color: "#fff", fontSize: 14 },
   item: {
     flexDirection: "row",
     gap: 12,
     padding: 10,
-    backgroundColor: "#fff",
+    backgroundColor: colors.cream2,
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: FF.border,
+    borderColor: colors.border,
     marginBottom: 6,
   },
   thumb: {
@@ -277,17 +281,17 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#fff",
+    backgroundColor: colors.cream2,
     borderWidth: 1,
-    borderColor: FF.border,
+    borderColor: colors.border,
   },
   badge: {
     fontSize: 11,
     fontWeight: "800",
-    color: FF.orange,
+    color: colors.orange,
     marginBottom: 4,
   },
-  itemName: { fontSize: 17, fontWeight: "900", color: FF.dark },
-  itemDesc: { fontSize: 12, color: FF.med, marginTop: 4, lineHeight: 16 },
-  price: { fontSize: 17, fontWeight: "900", marginTop: 6, color: FF.dark },
+  itemName: { fontSize: 17, fontWeight: "900", color: colors.dark },
+  itemDesc: { fontSize: 12, color: colors.med, marginTop: 4, lineHeight: 16 },
+  price: { fontSize: 17, fontWeight: "900", marginTop: 6, color: colors.dark },
 });

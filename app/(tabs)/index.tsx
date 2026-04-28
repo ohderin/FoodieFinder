@@ -19,7 +19,6 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { DirectionsSheet } from "../../src/components/DirectionsSheet";
 import { RESTAURANT_POOL, SAMPLE_RESTAURANT, type Restaurant } from "../../src/data/sampleRestaurant";
-import { FF } from "../../src/theme/colors";
 
 
 
@@ -139,7 +138,7 @@ function containsAll(selected: string[] | undefined, available: string[]) {
 
 export default function DiscoverScreen() {
   const insets = useSafeAreaInsets();
-  const { vibePreferences } = useApp();
+  const { vibePreferences, addHeart, colors } = useApp();
   const [directionsOpen, setDirectionsOpen] = useState(false);
   const [filters, setFilters] = useState<boolean[]>(() => FILTERS.map((_, i) => i === 0));
   const [prefs, setPrefs] = useState<SwipePrefs>(INITIAL_PREFS);
@@ -178,7 +177,6 @@ export default function DiscoverScreen() {
     prefsRef.current = prefs;
   }, [prefs]);
 
-  const { addHeart } = useApp();
 
   const toggleFilter = (index: number) => {
     setFilters((current) => {
@@ -389,17 +387,19 @@ const vibeFilteredRestaurants = useMemo(() => {
     [restaurant, snapBack, swipe, triggerSwipe]
   );
 
+  const styles = useMemo(() => createStyles(colors), [colors]);
+
   return (
     <View style={[styles.root, { paddingTop: insets.top + 6 }]}>
       <View style={styles.searchBar}>
         <View style={styles.glassFill} />
         <View style={styles.searchContent}>
-          <Ionicons name="search" size={16} color={FF.light} />
+          <Ionicons name="search" size={16} color={colors.light} />
            <TextInput
       placeholder="Search categories, cuisines..."
       value={searchTEXT}
       onChangeText={setSearchText}
-         placeholderTextColor={FF.light}
+         placeholderTextColor={colors.light}
          style={styles.searchInput}
           />
         </View>
@@ -533,6 +533,9 @@ function CircleAction({
   accent?: boolean;
   onPress?: () => void;
 }) {
+  const { colors } = useApp();
+  const styles = useMemo(() => createStyles(colors), [colors]);
+
   return (
     <Pressable
       onPress={onPress}
@@ -543,10 +546,10 @@ function CircleAction({
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ReturnType<typeof useApp>["colors"]) => StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: FF.cream,
+    backgroundColor: colors.cream,
     paddingHorizontal: 14,
   },
   searchBar: {
@@ -563,7 +566,7 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     flex: 1,
-    color: FF.dark,
+    color: colors.dark,
     fontSize: 15,
   },
   searchContent: {
@@ -574,7 +577,7 @@ const styles = StyleSheet.create({
     paddingVertical: 11,
   },
   searchPh: {
-    color: FF.light,
+    color: colors.light,
     fontSize: 15,
   },
   glassFill: {
@@ -597,20 +600,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 13,
     paddingVertical: 6,
     borderWidth: 1,
-    borderColor: FF.border,
-    backgroundColor: "#fff",
+    borderColor: colors.border,
+    backgroundColor: colors.cream2,
   },
   filterPillActive: {
-    borderColor: FF.red,
-    backgroundColor: FF.redLight,
+    borderColor: colors.red,
+    backgroundColor: colors.redLight,
   },
   filterText: {
-    color: FF.dark,
+    color: colors.dark,
     fontSize: 12,
     fontWeight: "600",
   },
   filterTextActive: {
-    color: FF.redDark,
+    color: colors.redDark,
   },
   cardArea: {
     flex: 1,
