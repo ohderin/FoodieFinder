@@ -26,7 +26,7 @@ export default function StartScreen() {
       <Text style={styles.p}>How would you like to explore?</Text>
       <View style={{ flex: 1 }} />
       <View style={styles.actions}>
-        <FFPrimaryButton title="🐾 Help Me Find Something!" onPress={() => router.push("/onboarding/prefs")} />
+        <FFPrimaryButton title="Help Me Find Something" onPress={() => router.push("/onboarding/prefs")} />
         <View style={styles.orRow}>
           <View style={styles.orLine} />
           <Text style={styles.orText}>or</Text>

@@ -1,4 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useState, useMemo } from "react";
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SAMPLE_RESTAURANT } from "../src/data/sampleRestaurant";
@@ -7,7 +8,7 @@ import { getRestaurantTheme } from "../src/data/restaurantColors";
 import { useLocalSearchParams } from "expo-router";
 import { RESTAURANT_POOL } from "../src/data/sampleRestaurant";
 import { getMenuForRestaurant } from "../src/data/restaurantMenus";
-import { RESTAURANT_EMOJIS } from "../src/data/restaurantEmoji";
+import { getIconForRestaurant } from "../src/data/restaurantEmoji";
 
 export default function MenuScreen() {
   const { restaurantId } = useLocalSearchParams<{ restaurantId: string }>();
@@ -47,9 +48,9 @@ export default function MenuScreen() {
   const getItems = menuItems.filter((item) => item.category === cat);
 
 
-  //gets emojis for menu
-  const emoji = useMemo (() => {
-      return RESTAURANT_EMOJIS[currentRestaurant.id] 
+  // Gets onboarding-style icon for menu item thumbnails.
+  const menuIcon = useMemo(() => {
+      return getIconForRestaurant(currentRestaurant.id);
   }, [currentRestaurant.id]);
   
   // Create dynamic styles based on theme
@@ -59,9 +60,6 @@ export default function MenuScreen() {
         colors: [theme.dark, theme.primary] as const,
       },
       catOn: {
-        backgroundColor: theme.primary,
-      },
-      thumb: {
         backgroundColor: theme.primary,
       },
       price: {
@@ -126,10 +124,17 @@ export default function MenuScreen() {
             <View
               style={[
                 styles.thumb,
-                { backgroundColor: dynamicStyles.thumb.backgroundColor },
               ]}
             >
-              <Text style={{ fontSize: 22 }}>{emoji}</Text>
+              {menuIcon.lib === "ion" ? (
+                <Ionicons name={menuIcon.name as React.ComponentProps<typeof Ionicons>["name"]} size={22} color={FF.med} />
+              ) : (
+                <MaterialCommunityIcons
+                  name={menuIcon.name as React.ComponentProps<typeof MaterialCommunityIcons>["name"]}
+                  size={22}
+                  color={FF.med}
+                />
+              )}
             </View>
             <View style={{ flex: 1 }}>
               {item.badge ? (
@@ -216,6 +221,9 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: FF.border,
   },
   badge: {
     fontSize: 11,
