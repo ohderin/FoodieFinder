@@ -1,3 +1,5 @@
+import { Ionicons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -11,29 +13,35 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useApp } from "../../src/context/AppContext";
 import { FF } from "../../src/theme/colors";
 
-const MEALS = [
-  { emoji: "🌅", label: "Breakfast" },
-  { emoji: "☀️", label: "Lunch" },
-  { emoji: "🌙", label: "Dinner" },
-  { emoji: "🧁", label: "Dessert" },
+type IconName = React.ComponentProps<typeof Ionicons>["name"];
+type MciIconName = React.ComponentProps<typeof MaterialCommunityIcons>["name"];
+type IconSpec =
+  | { lib: "ion"; name: IconName }
+  | { lib: "mci"; name: MciIconName };
+
+const MEALS: ReadonlyArray<{ icon: IconSpec; label: string }> = [
+  { icon: { lib: "ion", name: "cafe-outline" }, label: "Breakfast" },
+  { icon: { lib: "ion", name: "sunny-outline" }, label: "Lunch" },
+  { icon: { lib: "ion", name: "moon-outline" }, label: "Dinner" },
+  { icon: { lib: "ion", name: "ice-cream-outline" }, label: "Dessert" },
 ];
-const STYLES = [
-  { emoji: "🍽️", label: "Dine-in" },
-  { emoji: "🛍️", label: "Takeout" },
-  { emoji: "🛵", label: "Delivery" },
+const STYLES: ReadonlyArray<{ icon: IconSpec; label: string }> = [
+  { icon: { lib: "ion", name: "restaurant-outline" }, label: "Dine-in" },
+  { icon: { lib: "ion", name: "bag-handle-outline" }, label: "Takeout" },
+  { icon: { lib: "ion", name: "bicycle-outline" }, label: "Delivery" },
 ];
-const CUISINES = [
-  ["🍗", "Chicken"],
-  ["🍔", "Burgers"],
-  ["🌮", "Mexican"],
-  ["🍣", "Sushi"],
-  ["🍕", "Pizza"],
-  ["🥗", "Salads"],
-] as const;
+const CUISINES: ReadonlyArray<{ icon: IconSpec; label: string }> = [
+  { icon: { lib: "mci", name: "food-drumstick-outline" }, label: "Chicken" },
+  { icon: { lib: "ion", name: "fast-food-outline" }, label: "Burgers" },
+  { icon: { lib: "mci", name: "taco" }, label: "Mexican" },
+  { icon: { lib: "ion", name: "fish-outline" }, label: "Sushi" },
+  { icon: { lib: "ion", name: "pizza-outline" }, label: "Pizza" },
+  { icon: { lib: "ion", name: "leaf-outline" }, label: "Salads" },
+];
 
 export default function PrefsScreen() {
   const insets = useSafeAreaInsets();
-  const { completeOnboarding } = useApp();
+  const { completeOnboarding, saveVibePreferences } = useApp();
   const [meal, setMeal] = useState<Record<string, boolean>>({
     Lunch: true,
     Dinner: true,
@@ -46,6 +54,12 @@ export default function PrefsScreen() {
   const [price, setPrice] = useState(1);
 
   const finish = async () => {
+    await saveVibePreferences({
+      meals: Object.keys(meal).filter((label) => meal[label]),
+      styles: Object.keys(style).filter((label) => style[label]),
+      cuisines: Object.keys(cuisine).filter((label) => cuisine[label]),
+      priceLevel: price + 1,
+    });
     await completeOnboarding();
     router.replace("/(tabs)");
   };
@@ -65,7 +79,7 @@ export default function PrefsScreen() {
             {MEALS.map((m) => (
               <PrefChip
                 key={m.label}
-                emoji={m.emoji}
+                icon={m.icon}
                 label={m.label}
                 on={!!meal[m.label]}
                 onToggle={() =>
@@ -80,7 +94,7 @@ export default function PrefsScreen() {
             {STYLES.map((m) => (
               <PrefChip
                 key={m.label}
-                emoji={m.emoji}
+                icon={m.icon}
                 label={m.label}
                 on={!!style[m.label]}
                 onToggle={() =>
@@ -92,10 +106,10 @@ export default function PrefsScreen() {
         </Section>
         <Section title="Cuisine">
           <ChipRow>
-            {CUISINES.map(([emoji, label]) => (
+            {CUISINES.map(({ icon, label }) => (
               <PrefChip
                 key={label}
-                emoji={emoji}
+                icon={icon}
                 label={label}
                 on={!!cuisine[label]}
                 onToggle={() =>
@@ -131,7 +145,7 @@ export default function PrefsScreen() {
       </ScrollView>
       <View style={[styles.footer, { paddingBottom: insets.bottom + 16 }]}>
         <Pressable style={styles.showBtn} onPress={finish}>
-          <Text style={styles.showBtnText}>Show Me! 🐾</Text>
+          <Text style={styles.showBtnText}>Explore</Text>
         </Pressable>
       </View>
     </View>
@@ -160,12 +174,12 @@ function ChipRow({ children }: { children: React.ReactNode }) {
 }
 
 function PrefChip({
-  emoji,
+  icon,
   label,
   on,
   onToggle,
 }: {
-  emoji: string;
+  icon: IconSpec;
   label: string;
   on: boolean;
   onToggle: () => void;
@@ -176,7 +190,16 @@ function PrefChip({
       style={[styles.chip, on && styles.chipOn]}
     >
       <Text>
-        <Text style={styles.chipEmoji}>{emoji}</Text>
+        {icon.lib === "ion" ? (
+          <Ionicons name={icon.name} size={15} color={FF.med} style={styles.chipIcon} />
+        ) : (
+          <MaterialCommunityIcons
+            name={icon.name}
+            size={15}
+            color={FF.med}
+            style={styles.chipIcon}
+          />
+        )}
         <Text style={styles.chipLabel}> {label}</Text>
       </Text>
     </Pressable>
@@ -215,7 +238,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     backgroundColor: FF.redLight,
   },
-  chipEmoji: { fontSize: 16 },
+  chipIcon: { marginRight: 2 },
   chipLabel: { fontSize: 14, fontWeight: "700", color: FF.dark },
   priceRow: { flexDirection: "row", gap: 12 },
   priceTile: {

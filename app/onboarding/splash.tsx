@@ -12,10 +12,6 @@ export default function SplashScreen() {
   return (
     <View style={[styles.root, { paddingTop: insets.top + 8, paddingBottom: insets.bottom + 24 }]}>
       <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-        <MascotBlob />
-        <View style={styles.logoBlock}>
-          <Text style={styles.logo}>Foodie</Text>
-        </View>
         <Text style={styles.welcome}>Welcome!</Text>
         <Text style={styles.p}>
           Discover the best restaurants near you, curated for your taste.
@@ -23,7 +19,7 @@ export default function SplashScreen() {
       </ScrollView>
       <View style={styles.actions}>
         <FFPrimaryButton
-          title="📍 Share My Location"
+          title="Share My Location"
           onPress={() => router.push("/onboarding/location")}
         />
         <View style={styles.orRow}>

@@ -10,7 +10,7 @@ export default function RootLayout() {
           screenOptions={({ route }) => {
             if (route.name === "menu") {
               return {
-                presentation: "modal",
+                //presentation: "card",
                 headerShown: true,
                 title: "Menu",
               };

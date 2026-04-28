@@ -27,7 +27,6 @@ export default function LocationScreen() {
       <View style={{ flex: 1 }} />
       <View style={styles.sheet}>
         <View style={styles.sheetHead}>
-          <Text style={styles.sheetIcon}>📍</Text>
           <Text style={styles.sheetTitle}>Allow Foodie to access your location?</Text>
           <Text style={styles.sheetDesc}>Used only to show restaurants near you</Text>
         </View>

@@ -12,12 +12,17 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { DirectionsSheet } from "../../src/components/DirectionsSheet";
+import { useApp } from "../../src/context/AppContext";
 import { RESTAURANT_POOL, SAMPLE_RESTAURANT, type Restaurant } from "../../src/data/sampleRestaurant";
 import { FF } from "../../src/theme/colors";
+
+
+
 
 const FILTERS = ["Nearby", "Open Now", "$$$", "$$", "$"];
 const DEFAULT_RESTAURANT_BG_URI =
@@ -25,6 +30,11 @@ const DEFAULT_RESTAURANT_BG_URI =
 const SWIPE_THRESHOLD = 120;
 const SWIPE_PREFS_KEY = "foodie.swipePrefs";
 const AnimatedImageBackground = Animated.createAnimatedComponent(ImageBackground);
+const NEARBY_RADIUS_MILES = 3.5;
+const HARD_CODED_NEARBY_ORIGIN = {
+  latitude: 30.4128,
+  longitude: -91.1773,
+};
 
 type SwipePrefs = {
   disliked: Record<string, true>;
@@ -63,8 +73,12 @@ function normalizePrefs(raw: unknown): SwipePrefs {
   };
 }
 
-function pickNextRestaurant(prefs: SwipePrefs, excludeId?: string): Restaurant | null {
-  const candidates = RESTAURANT_POOL.filter((restaurant) => !prefs.disliked[restaurant.id]);
+function pickNextRestaurant(
+  prefs: SwipePrefs,
+  excludeId?: string,
+  pool: Restaurant[] = RESTAURANT_POOL
+): Restaurant | null {
+  const candidates = pool.filter((restaurant) => !prefs.disliked[restaurant.id]);
   if (!candidates.length) return null;
 
   const weighted = candidates.map((restaurant) => {
@@ -83,6 +97,23 @@ function pickNextRestaurant(prefs: SwipePrefs, excludeId?: string): Restaurant |
   return weighted[weighted.length - 1]?.restaurant ?? null;
 }
 
+function milesBetween(
+  from: { latitude: number; longitude: number },
+  to: { latitude: number; longitude: number }
+) {
+  const toRadians = (deg: number) => (deg * Math.PI) / 180;
+  const earthRadiusMiles = 3958.8;
+  const dLat = toRadians(to.latitude - from.latitude);
+  const dLon = toRadians(to.longitude - from.longitude);
+  const lat1 = toRadians(from.latitude);
+  const lat2 = toRadians(to.latitude);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return earthRadiusMiles * c;
+}
+
 function buildNextPrefs(current: SwipePrefs, currentId: string, direction: "left" | "right"): SwipePrefs {
   const next: SwipePrefs = {
     disliked: { ...current.disliked },
@@ -96,8 +127,19 @@ function buildNextPrefs(current: SwipePrefs, currentId: string, direction: "left
   return next;
 }
 
+function overlaps(selected: string[] | undefined, available: string[]) {
+  if (!selected || selected.length === 0) return true;
+  return selected.some((value) => available.includes(value));
+}
+
+function containsAll(selected: string[] | undefined, available: string[]) {
+  if (!selected || selected.length === 0) return false;
+  return selected.every((value) => available.includes(value));
+}
+
 export default function DiscoverScreen() {
   const insets = useSafeAreaInsets();
+  const { vibePreferences } = useApp();
   const [directionsOpen, setDirectionsOpen] = useState(false);
   const [filters, setFilters] = useState<boolean[]>(() => FILTERS.map((_, i) => i === 0));
   const [prefs, setPrefs] = useState<SwipePrefs>(INITIAL_PREFS);
@@ -105,7 +147,8 @@ export default function DiscoverScreen() {
   const [prefsHydrated, setPrefsHydrated] = useState(false);
   const swipe = useRef(new Animated.ValueXY()).current;
   const prefsRef = useRef<SwipePrefs>(INITIAL_PREFS);
-
+  const [searchTEXT, setSearchText] = useState("");
+  
   useEffect(() => {
     (async () => {
       try {
@@ -145,6 +188,89 @@ export default function DiscoverScreen() {
     });
   };
 
+  const distanceByRestaurantId = useMemo(() => {
+    return Object.fromEntries(
+      RESTAURANT_POOL.map((restaurant) => [
+        restaurant.id,
+        milesBetween(
+          HARD_CODED_NEARBY_ORIGIN,
+          { latitude: restaurant.latitude, longitude: restaurant.longitude }
+        ),
+      ])
+    ) as Record<string, number>;
+  }, []);
+
+  const filteredRestaurants = useMemo(() => {
+    const showNearbyOnly = filters[0];
+    const showOpenOnly = filters[1];
+    const selectedPriceLevels = FILTERS.slice(2)
+      .map((label, idx) => (filters[idx + 2] ? label.length : null))
+      .filter((value): value is number => value !== null);
+
+    let next = RESTAURANT_POOL.filter((item) => {
+      if (showOpenOnly && !item.isOpen) return false;
+      if (selectedPriceLevels.length > 0 && !selectedPriceLevels.includes(item.priceLevel)) return false;
+      if (showNearbyOnly) {
+        const miles = distanceByRestaurantId[item.id];
+        return typeof miles === "number" && miles <= NEARBY_RADIUS_MILES;
+      }
+      return true;
+    });
+
+    if (showNearbyOnly) {
+      next = [...next].sort((a, b) => {
+        const aMiles = distanceByRestaurantId[a.id] ?? a.distanceMiles;
+        const bMiles = distanceByRestaurantId[b.id] ?? b.distanceMiles;
+        return aMiles - bMiles;
+      });
+    }
+
+    return next;
+  }, [distanceByRestaurantId, filters]);
+
+const vibeFilteredRestaurants = useMemo(() => {
+  let candidates = filteredRestaurants;
+  
+  if (searchTEXT.trim()) {
+    const lower = searchTEXT.toLowerCase();
+    candidates = candidates.filter((restaurant) =>
+      restaurant.name.toLowerCase().includes(lower) ||
+      restaurant?.cuisineTags?.some((tag) => tag.toLowerCase().includes(lower)) ||
+      restaurant?.tags?.some((tag) => tag.toLowerCase().includes(lower))
+    );
+  }
+  
+  if (!vibePreferences) return candidates;
+  
+  const narrowed = candidates.filter((restaurant) => {
+    if (restaurant.priceLevel !== vibePreferences.priceLevel) return false;
+    if (!overlaps(vibePreferences.meals, restaurant.mealTags)) return false;
+    if (!overlaps(vibePreferences.styles, restaurant.diningStyles)) return false;
+    if (!overlaps(vibePreferences.cuisines, restaurant.cuisineTags)) return false;
+    return true;
+  });
+  
+  return narrowed.length > 0 ? narrowed : candidates;
+}, [filteredRestaurants, vibePreferences, searchTEXT]);
+
+  const strictVibeMatchedIds = useMemo(() => {
+    if (!vibePreferences) return new Set<string>();
+    const strictMatches = filteredRestaurants.filter((candidate) => {
+      return (
+        candidate.priceLevel === vibePreferences.priceLevel &&
+        containsAll(vibePreferences.meals, candidate.mealTags) &&
+        containsAll(vibePreferences.styles, candidate.diningStyles) &&
+        containsAll(vibePreferences.cuisines, candidate.cuisineTags)
+      );
+    });
+    return new Set(strictMatches.map((item) => item.id));
+  }, [filteredRestaurants, vibePreferences]);
+
+  const isVibeMatch = useMemo(() => {
+    if (!restaurant || !vibePreferences) return false;
+    return strictVibeMatchedIds.has(restaurant.id);
+  }, [restaurant, strictVibeMatchedIds, vibePreferences]);
+
   const rotate = useMemo(
     () =>
       swipe.x.interpolate({
@@ -183,9 +309,9 @@ export default function DiscoverScreen() {
       }
       const nextPrefs = buildNextPrefs(prefsRef.current, currentId, direction);
       setPrefs(nextPrefs);
-      setRestaurant(pickNextRestaurant(nextPrefs, currentId));
+      setRestaurant(pickNextRestaurant(nextPrefs, currentId, vibeFilteredRestaurants));
     },
-    [addHeart]
+    [restaurant, vibeFilteredRestaurants, addHeart]
   );
 
   const snapBack = useCallback(() => {
@@ -216,8 +342,16 @@ export default function DiscoverScreen() {
   const resetRecommendations = useCallback(() => {
     swipe.setValue({ x: 0, y: 0 });
     setPrefs(INITIAL_PREFS);
-    setRestaurant(pickNextRestaurant(INITIAL_PREFS));
-  }, [swipe]);
+    setRestaurant(pickNextRestaurant(INITIAL_PREFS, undefined, vibeFilteredRestaurants));
+  }, [swipe, vibeFilteredRestaurants]);
+
+  useEffect(() => {
+    const stillVisible =
+      !!restaurant && vibeFilteredRestaurants.some((candidate) => candidate.id === restaurant.id);
+    if (!stillVisible) {
+      setRestaurant(pickNextRestaurant(prefs, restaurant?.id, vibeFilteredRestaurants));
+    }
+  }, [prefs, restaurant, vibeFilteredRestaurants]);
 
   const panResponder = useMemo(
     () =>
@@ -251,7 +385,13 @@ export default function DiscoverScreen() {
         <View style={styles.glassFill} />
         <View style={styles.searchContent}>
           <Ionicons name="search" size={16} color={FF.light} />
-          <Text style={styles.searchPh}>Search restaurants, dishes...</Text>
+           <TextInput
+      placeholder="Search categories, cuisines..."
+      value={searchTEXT}
+      onChangeText={setSearchText}
+         placeholderTextColor={FF.light}
+         style={styles.searchInput}
+          />
         </View>
       </View>
 
@@ -301,6 +441,12 @@ export default function DiscoverScreen() {
             <Ionicons name="location-sharp" size={12} color="#E8FFF4" />
             <Text style={styles.locationPillText}>Nearby</Text>
           </View>
+          {isVibeMatch ? (
+            <View style={styles.vibeMatchPill}>
+              <Ionicons name="sparkles" size={12} color="#FFF2E6" />
+              <Text style={styles.vibeMatchPillText}>Matched your vibe</Text>
+            </View>
+          ) : null}
 
           <Pressable style={styles.floatAction} onPress={() => setDirectionsOpen(true)} disabled={!restaurant}>
             <Ionicons name="arrow-up" size={20} color="#FFFFFF" />
@@ -317,9 +463,14 @@ export default function DiscoverScreen() {
             {restaurant ? (
               <>
                 <Text style={styles.nameText}>{restaurant.name}</Text>
-                <Text style={styles.metaText}>LSU Area · {restaurant.distanceMiles.toFixed(1)} miles away</Text>
+                <Text style={styles.metaText}>
+                  LSU Area · {(distanceByRestaurantId[restaurant.id] ?? restaurant.distanceMiles).toFixed(1)} miles away
+                </Text>
                 <Text style={styles.metaText}>
                   {restaurant.tags[0]}, {restaurant.tags[1]}
+                </Text>
+                <Text style={styles.metaText}>
+                  {restaurant.isOpen ? "Open Now" : "Closed"} · {restaurant.closingNote}
                 </Text>
                 <Text style={styles.ratingText}>
                   ★ {restaurant.rating.toFixed(1)} ({restaurant.reviewCount} reviews)
@@ -339,7 +490,14 @@ export default function DiscoverScreen() {
       <View style={styles.actionRow}>
         <CircleAction icon="refresh" color="#A5A5AA" onPress={resetRecommendations} />
         <CircleAction icon="close" color="#F44336" big onPress={() => triggerSwipe("left")} />
-        <CircleAction icon="restaurant" color="#F44336" onPress={() => router.push("/menu")} />
+        <CircleAction icon="restaurant" color="#F44336" onPress={() => { if (restaurant) {
+           router.push({
+          pathname: "/menu",
+          params: {restaurantId: restaurant.id}
+          })
+        }
+        }} 
+          />
         <CircleAction icon="heart" color="#FFFFFF" big onPress={() => triggerSwipe("right")} accent />
       </View>
 
@@ -392,6 +550,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.12,
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 6 },
+  },
+  searchInput: {
+    flex: 1,
+    color: FF.dark,
+    fontSize: 15,
   },
   searchContent: {
     flexDirection: "row",
@@ -501,6 +664,25 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 13,
   },
+  vibeMatchPill: {
+    position: "absolute",
+    left: 16,
+    top: 56,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    backgroundColor: "rgba(242,67,0,0.9)",
+    borderRadius: 999,
+    paddingHorizontal: 11,
+    paddingVertical: 5,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.3)",
+  },
+  vibeMatchPillText: {
+    color: "#FFF2E6",
+    fontWeight: "700",
+    fontSize: 12,
+  },
   floatAction: {
     position: "absolute",
     right: 16,
@@ -582,3 +764,4 @@ const styles = StyleSheet.create({
     borderColor: "#F24300",
   },
 });
+
