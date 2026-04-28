@@ -8,6 +8,8 @@ import { useApp } from "../../src/context/AppContext";
 export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
   const { resetOnboarding, hearted, isDarkMode, setDarkMode, colors } = useApp();
+  const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
+  const [locationEnabled, setLocationEnabled] = React.useState(true);
 
   const signOut = async () => {
     await resetOnboarding();
@@ -36,7 +38,18 @@ export default function ProfileScreen() {
           colors={colors}
           onPress={() => router.push("/onboarding/prefs")}
         />
-        <MenuRow title="Location Settings" colors={colors} />
+        <MenuRow
+          title="Location Settings"
+          colors={colors}
+          control={
+            <Switch
+              value={locationEnabled}
+              onValueChange={setLocationEnabled}
+              trackColor={{ false: colors.border, true: colors.red }}
+              thumbColor={locationEnabled ? "#fff" : "#f4f3f4"}
+            />
+          }
+        />
         <MenuRow
           title="Dark Mode"
           colors={colors}
@@ -51,7 +64,19 @@ export default function ProfileScreen() {
             />
           }
         />
-        <MenuRow title="Notifications" colors={colors} last />
+        <MenuRow
+          title="Notifications"
+          colors={colors}
+          control={
+            <Switch
+              value={notificationsEnabled}
+              onValueChange={setNotificationsEnabled}
+              trackColor={{ false: colors.border, true: colors.red }}
+              thumbColor={notificationsEnabled ? "#fff" : "#f4f3f4"}
+            />
+          }
+          last
+        />
       </View>
       <FFOutlineButton title="Sign Out" onPress={signOut} />
     </View>
