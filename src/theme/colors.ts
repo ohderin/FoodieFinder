@@ -15,10 +15,10 @@ export const FF_LIGHT = {
 } as const;
 
 export const FF_DARK = {
-  red: "#ff5a67",
-  redLight: "#4A1F24",
-  redDark: "#FFB1B9",
-  orange: "#FF9B45",
+  red: "#e63946",
+  redLight: "#8F1D27",
+  redDark: "#FDE8EA",
+  orange: "#FF7F00",
   golden: "#ffd166",
   cream: "#121212",
   cream2: "#1D1D1D",
@@ -26,7 +26,7 @@ export const FF_DARK = {
   med: "#D3C5B8",
   light: "#A49485",
   border: "#3A332D",
-  green: "#52B56A",
+  green: "#2D7D46",
 } as const;
 
 export type FFColors = typeof FF_LIGHT;
